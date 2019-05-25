@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Start your development with a Design System for Bootstrap 4.">
+  <meta name="author" content="Creative Tim">
+  <title>Retail Physical Inventory Processing</title>
+  <!-- Favicon -->
+  <link href="assets/img/brand/favicon.png" rel="icon" type="image/png">
+  <!-- Icons -->
+  <link href="assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
+  <link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Argon CSS -->
+  <link type="text/css" href="assets/css/argon.css?v=1.0.1" rel="stylesheet">
+  <!-- Docs CSS -->
+  <link type="text/css" href="assets/css/docs.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-11" id="general-message">
+          <div class="alert alert-default" role="alert">
+              Informational  messages will be shown here
+          </div>
+      </div>
+      <div class="col-1">
+          <div id="waiting-for-process" class="alert alert-secondary d-none" role="alert">
+              <i class="fa fa-spinner fa-spin text-success" aria-hidden="true"></i>
+          </div>
+        
+      </div>
+    </div>
+    <div class="nav-wrapper">
+      <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-home" data-toggle="tab" href="#tabs-home" role="tab"
+            aria-controls="tabs-home" aria-selected="true"><i class="fa fa-home"></i> Home</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-settings" data-toggle="tab" href="#tabs-settings"
+            role="tab" aria-controls="tabs-icons-settings" aria-selected="false"><i class="fa fa-cog"
+              aria-hidden="true"></i> Settings</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card shadow">
+      <div class="card-body">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="tabs-home" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+            <button class="btn btn-icon btn-primary" id="home-start-inventory-button" type="button" data-toggle="modal"
+              data-target="#modal-add-inventory">
+              <span class="btn-inner--icon"><i class="fa fa-plus" aria-hidden="true"></i></span>
+
+              <span class="btn-inner--text">Start Inventory</span>
+
+            </button>
+            <div class="form-group">
+                <label for="inventory-menu">Inventories</label>
+                <select class="form-control" id="inventory-menu">
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+              </div>
+            <!--
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Select Inventory
+                </button>
+                <div id="inventory-menu" class="dropdown-menu dropdown-menu">
+                  <button class="dropdown-item" id="inventory-dropdown-1" type="button">5/24/2019</button>
+                  <button class="dropdown-item" id="inventory-dropdown-2" type="button">5/24/2019</button>
+                </div>
+              </div>
+            -->
+            
+            <!-- Modal -->
+            <div class="modal fade" id="modal-add-inventory" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+
+                  <div class="modal-body">
+                    <form role="form">
+                      <div class="row">
+                        <div class="col-3">
+                          Customer
+                        </div>
+                        <div class="col-9">
+                            
+                            <select class="form-control" id="customer-menu">
+                            </select>
+                          <!--
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                              aria-haspopup="true" aria-expanded="false">
+                              Customer
+                            </button>
+                            <div id="customer-menu" class="dropdown-menu dropdown-menu">
+                              <button class="dropdown-item" id="customer-dropdown-12" type="button">Jose Ponce</button>
+                              <button class="dropdown-item" id="customer-dropdown-17" type="button">Gilberto
+                                Gomez</button>
+                            </div>
+                          </div>
+                        -->
+                        </div>
+                        <!--
+                        <div class="col-4 text-center">
+                          <span id="customer-name">Jose Ponce</span>
+                        </div>
+                      -->
+                      </div>
+                      <div class="row">
+                        <div class="col-3">
+                          Supervisor
+                        </div>
+                        <div class="col-9">
+                            <select class="form-control" id="supervisor-menu">
+                            </select>
+                          <!--
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                              aria-haspopup="true" aria-expanded="false">
+                              Supervisor
+                            </button>
+                            <div id="supervisor-menu" class="dropdown-menu dropdown-menu">
+                              <button class="dropdown-item" id="supervisor-dropdown-AB1234" type="button">AB 1245</button>
+                              <button class="dropdown-item" id="supervisor-dropdown-AB4567" type="button">AB 4567
+                              </button>
+                            </div>
+                          </div>
+                        -->
+                        </div>
+                        <!--
+                        <div class="col-4 text-center">
+                          <span id="Supervisor-name">Abc 1234</span>
+                        </div>
+                      -->
+                      </div>
+                      <div class="row">
+                        <div class="col-3">
+                          Start Date
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            <div class="input-group input-group-alternative">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                              </div>
+                              <input name="inventory-start-date" id="inventory-start-date"
+                                class="form-control datepicker" placeholder="Select date" type="text">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-5 text-center">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input name="inventory-start-time" id="inventory-start-time"
+                                      class="form-control" type="time"
+                                      >
+                                  </div>
+                              </div>
+                          <!--
+                          <div class="row">
+                            <div class="col-6">
+                              
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                  aria-haspopup="true" aria-expanded="false">
+                                  Time
+                                </button>
+                                <div id="start-time-menu" class="dropdown-menu dropdown-menu">
+                                  <button class="dropdown-item" id="start-time-dropdown-1" type="button">6:00 PM
+                                    </button>
+                                  <button class="dropdown-item" id="start-time-dropdown-2" type="button">6:30 PM
+                                  </button>
+                                </div>
+                              </div>
+                           
+
+                            </div>
+                            <div class="col-6">
+                              <span id="start-time">6:00 PM</span>
+                            </div>
+                          </div>
+                           -->
+
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-3">
+                          End Date
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            <div class="input-group input-group-alternative">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                              </div>
+                              <input name="inventory-end-date" id="inventory-end-date" class="form-control datepicker"
+                                placeholder="Select date" type="text">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-5 text-center">
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input name="inventory-end-time" id="inventory-end-time"
+                                      class="form-control" type="time"
+                                      >
+                                  </div>
+                              </div>
+
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <textarea class="form-control" id="inventory-comments" rows="3"
+                            placeholder="Write comments here..."></textarea>
+                        </div>
+
+                      </div>
+                      <div class="row">
+                        <div class="col-6">
+                          <button id="save-inventory-button" type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                        <div class="col-6">
+                          <button id="cancel-inventory-button" type="button" class="btn btn-secondary float-right"
+                            data-dismiss="modal">Cancel</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="tab-pane fade" id="tabs-settings" role="tabpanel" aria-labelledby="tabs-icons-settings">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+
+  <footer class="footer has-cards">
+
+    <div class="container">
+      <div class="row align-items-center justify-content-md-between">
+        <div class="col-md-6">
+          <div class="copyright">
+            &copy; 2019
+            <a href="https://www.poncesolutions.com" target="_blank">PonceSolutions.com</a>.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <!--
+          <ul class="nav nav-footer justify-content-end">
+            <li class="nav-item">
+              <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a href="https://github.com/creativetimofficial/argon-design-system/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
+            </li>
+          </ul>
+		  -->
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Core -->
+  <script src="assets/vendor/jquery/jquery.min.js"></script>
+  <script src="assets/vendor/popper/popper.min.js"></script>
+  <script src="assets/vendor/bootstrap/bootstrap.min.js"></script>
+  <script src="assets/vendor/headroom/headroom.min.js"></script>
+
+  <!-- Argon JS -->
+  <script src="assets/js/argon.js?v=1.0.1"></script>
+  <script src="assets/js/d3.js"></script>
+  <script src="assets/js/crossfilter.js"></script>
+  <script src="assets/js/dc.js"></script>
+
+  <script src="assets/js/bootstrap-datepicker.min.js"></script>
+  <script src="assets/js/process-inventory.js"></script>
+  <script src="assets/js/axios.min.js"></script>
+</body>
+
+</html>
