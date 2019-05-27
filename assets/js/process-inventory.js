@@ -9,6 +9,7 @@ $(document).ready(function () {
 
 
     console.log($(".container-fluid").width());
+    var fluidWidth = $(".container-fluid").width();
   /*
     <input name="inventory-end-date" id="inventory-end-date" class="form-control"
                                 placeholder="Select date" type="date">
@@ -41,6 +42,15 @@ $(document).ready(function () {
 
   var ndx;
   var tableChart;
+  var allDim ;
+  var searchDim;
+
+  var auditorsDim;
+  var auditorsGroup;
+  var filesDim;
+  var filesGroup;
+  var areasDim;
+  var areasGroup 
 
   setTimes(15)
   setDates(10)
@@ -107,6 +117,17 @@ $(document).ready(function () {
     });
     */
 
+    $("#chart-reset-button").click(function(e){
+        console.log("clicked");
+        dc.filterAll();
+        dc.renderAll();
+    })
+
+    $("#column-seq").click(function(e){
+        e.preventDefault();
+        console.log("clicked");
+    })
+
   $('#inventory-menu').change(function () {
     // $( "#inventory-menu:selected" ).each(function() {
     enableUdateButton();
@@ -145,6 +166,156 @@ $(document).ready(function () {
 
     });
     */
+    $('#inventory-auditors-button').click(function (e) {
+        e.preventDefault();
+        console.log(ndx.size());
+        $('#main-chart').empty()
+        var chart = dc.pieChart('#main-chart');
+        chart
+          .width(fluidWidth)
+          .height(480)
+          .slicesCap(4)
+          .innerRadius(100)
+          .externalLabels(50)
+          .externalRadiusPadding(50)
+          .drawPaths(true)
+          .dimension(auditorsDim)
+          .group(auditorsGroup)
+          .legend(dc.legend());
+      // example of formatting the legend via svg
+      // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
+      chart.on('pretransition', function(chart) {
+          chart.selectAll('.dc-legend-item text')
+              .text('')
+            .append('tspan')
+              .text(function(d) { return d.name ; })
+            .append('tspan')
+              .attr('x', 150)
+              .attr('text-anchor', 'end')
+              .text(function(d) { return d.data; });
+      });
+      chart.render();
+        /*
+        chart
+            .width(fluidWidth)
+            .height(480)
+            .slicesCap(4)
+            .innerRadius(100)
+            .dimension(auditorsDim)
+            .group(auditorsGroup)
+            .legend(dc.legend())
+            // workaround for #703: not enough data is accessible through .label() to display percentages
+            .on('pretransition', function (chart) {
+            chart.selectAll('text.pie-slice').text(function (d) {
+                return (
+                d.data.key +
+                ' ' +
+                dc.utils.printSingleValue(
+                    ((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100
+                ) +
+                '%'
+                )
+            })
+            })
+        chart.render();
+        */
+    })
+
+    $('#inventory-files-button').click(function (e) {
+        e.preventDefault();
+        console.log(ndx.size());
+        $('#main-chart').empty()
+        var chart = dc.pieChart('#main-chart');
+        chart
+          .width(fluidWidth)
+          .height(480)
+          .slicesCap(4)
+          .innerRadius(100)
+          .externalLabels(50)
+          .externalRadiusPadding(50)
+          .drawPaths(true)
+          .dimension(filesDim)
+          .group(filesGroup)
+          .legend(dc.legend());
+      // example of formatting the legend via svg
+      // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
+      chart.on('pretransition', function(chart) {
+          chart.selectAll('.dc-legend-item text')
+              .text('')
+            .append('tspan')
+              .text(function(d) { 
+                  //console.log(d);
+                  //console.log(d.inv_file_name);
+                  return d.name ; 
+                })
+            .append('tspan')
+              .attr('x', 150)
+              .attr('text-anchor', 'end')
+              .text(function(d) { return d.data; });
+      });
+      chart.render();
+        /*
+        var chart = dc.pieChart('#main-chart');
+        chart
+            .width(fluidWidth)
+            .height(480)
+            .slicesCap(4)
+            .innerRadius(100)
+            .dimension(filesDim)
+            .group(filesGroup)
+            .legend(dc.legend())
+            // workaround for #703: not enough data is accessible through .label() to display percentages
+            .on('pretransition', function (chart) {
+            chart.selectAll('text.pie-slice').text(function (d) {
+                return (
+                d.data.key +
+                ' ' +
+                dc.utils.printSingleValue(
+                    ((d.endAngle - d.startAngle) / (2 * Math.PI)) * 100
+                ) +
+                '%'
+                )
+            })
+            })
+        chart.render();
+        */
+    })
+
+    $('#inventory-areas-button').click(function (e) {
+        e.preventDefault();
+        console.log(ndx.size());
+        $('#main-chart').empty()
+        var chart = dc.pieChart('#main-chart');
+        chart
+          .width(fluidWidth)
+          .height(480)
+          .slicesCap(4)
+          .innerRadius(100)
+          .externalLabels(50)
+          .externalRadiusPadding(50)
+          .drawPaths(true)
+          .dimension(areasDim)
+          .group(areasGroup)
+          .legend(dc.legend());
+      // example of formatting the legend via svg
+      // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
+      chart.on('pretransition', function(chart) {
+          chart.selectAll('.dc-legend-item text')
+              .text('')
+            .append('tspan')
+              .text(function(d) { 
+                  //console.log(d);
+                  //console.log(d.inv_file_name);
+                  return d.name ; 
+                })
+            .append('tspan')
+              .attr('x', 150)
+              .attr('text-anchor', 'end')
+              .text(function(d) { return d.data; });
+      });
+      chart.render();
+    })
+
 
   $("#inventory-entries-button").click(function(e){
       e.preventDefault();
@@ -162,9 +333,7 @@ $(document).ready(function () {
     thHeaders.push("inv_quantity");
     
 
-      ndx = crossfilter(inventoryCounts);
-      var allDim = ndx.dimension(function(d) {return d;});
-      var searchDim = ndx.dimension(function(d) {return d.inv_auditor + " " + d.item_description + " " + d.item_id});
+      searchDim = ndx.dimension(function(d) {return d.inv_auditor + " " + d.item_description + " " + d.item_id + " ^"+ d.inv_area +" @" + d.inv_section });
 
       var chartSearch = dc.textFilterWidget("#search").dimension(searchDim);
       //chartSearch.placeHolder('Search for auditor');
@@ -192,7 +361,7 @@ $(document).ready(function () {
                //.columns(thHeaders)
                .columns([
                    {
-                    label:'<span class="float-right">Seq</span>',
+                    label:'<span id="column-seq" onClick="alert(\'a\')" class="float-right">Seq <i class="fa fa-sort" aria-hidden="true"></i></span>',
                        format: function(d){
                         return  d.inv_sequence;
                        }
@@ -247,7 +416,6 @@ $(document).ready(function () {
                    
                ])
                .sortBy(function(d){
-                   console.log(d.inv_file_name + " " + d3.format("10")(d.inv_sequence)); ;
                    return d.inv_file_name + " " + d3.format("20")(d.inv_sequence);
                })
 
@@ -547,28 +715,28 @@ $(document).ready(function () {
   }
 
   function updateInventoryInfo(data){
-      var ctx = crossfilter(data);
-      var allCounts = ctx.groupAll();
+      //var ctx = crossfilter(data);
+      //var allCounts = ndx.groupAll();
       
-      var auditorsDim = ctx.dimension(function(d){
+      var auditorsDim = ndx.dimension(function(d){
           return d.inv_auditor;
       });
       var auditorsGroup = auditorsDim.group();
 
-      var filesDim = ctx.dimension(function(d){
+      var filesDim = ndx.dimension(function(d){
           return d.inv_file_name;
       })
 
       var filesGroup = filesDim.group();
 
-      var areasDim = ctx.dimension(function(d){
+      var areasDim = ndx.dimension(function(d){
           return d.inv_area
       })
 
       var areasGroup = areasDim.group();
 
       
-      $("#inventory-entries").html(ctx.size());
+      $("#inventory-entries").html(ndx.size());
       $("#inventory-auditors").html(auditorsGroup.size());
       $("#inventory-files").html(filesGroup.size());
       $("#inventory-areas").html(areasGroup.size());
@@ -642,7 +810,21 @@ $(document).ready(function () {
                 inventoryCounts.forEach(function (d) {
                     return d.inv_sequence = d.inv_sequence * 1
                 })
-                console.log(inventoryCounts);
+                ndx = crossfilter(inventoryCounts);
+                allDim = ndx.dimension(function(d) {return d;});
+                auditorsDim = ndx.dimension(function(d){
+                    return d.inv_auditor;
+                });
+                auditorsGroup = auditorsDim.group();
+                filesDim = ndx.dimension(function(d){
+                    return d.inv_file_name;
+                })
+                filesGroup = filesDim.group();
+                areasDim = ndx.dimension(function(d){
+                    return d.inv_area
+                })
+                areasGroup = areasDim.group();
+      
 
 
                 updateInventoryInfo(inventoryCounts);
