@@ -50,7 +50,10 @@ $(document).ready(function () {
   var filesDim;
   var filesGroup;
   var areasDim;
-  var areasGroup 
+  var areasGroup;
+  
+  retrieveInventoryCounts();
+  
 
   setTimes(15)
   setDates(10)
@@ -316,6 +319,107 @@ $(document).ready(function () {
       chart.render();
     })
 
+    function tableHeaderCallback(d) {
+        console.log("clicked");
+        console.log(d);
+        var activeClass = "info";
+        d3.selectAll("#inventory-entries-table th") // Disable all highlighting and icons
+            .classed(activeClass, false)
+          .selectAll("span")
+            //.style("visibility", "hidden") // Hide glyphicon
+            .select('i').remove()
+        var the = d3.selectAll("#inventory-entries-table th") // Disable all highlighting and icons
+            //.classed(activeClass, false)
+          .selectAll("span")
+          .append("i")
+        .attr("class","fa fa-sort")
+        .attr("aria-hidden","true");
+
+          var activeSpan = d3.select(this) // Enable active highlight and icon for active column for sorting
+            .classed(activeClass, true)  // Set bootstrap "info" class on active header for highlight
+          .select("span")
+          .select('i').remove()
+          //.style("visibility", "visible")
+          //.append("i")
+        //.attr("class",function(d){
+        //    return 'fa fa-sort';
+        //})
+        //.attr("aria-hidden","true")
+          //.select('i').remove()
+
+          d.sort_state = d.sort_state === "ascending" ? "descending" : "ascending";
+
+        var isAscendingOrder = d.sort_state === "ascending";
+
+          var activeSpan = d3.select(this) // Enable active highlight and icon for active column for sorting
+            .classed(activeClass, true)  // Set bootstrap "info" class on active header for highlight
+          .select("span")
+          .append("i")
+        .attr("class",function(d){
+            if (d.sort_state=="ascending") {
+                return 'fa fa-sort-up';
+            }
+            else {
+                return 'fa fa-sort-down';
+            }
+           
+        })
+        .attr("aria-hidden","true");
+            
+
+          console.log(this)
+
+          // Toggle sort order state to user desired state
+        
+
+        
+
+        tableChart
+        .order(isAscendingOrder ? d3.ascending : d3.descending)
+        .sortBy(function(datum) { return datum[d.field_name]; });
+        dc.renderAll();
+
+        //console.log(d);
+          //.filter(function(d) { console.log(d);return d.label === "Qty"; })
+          //.style("visibility", function(e){
+          //    console.log(e)
+
+          //})
+        /*
+        // Highlight column header being sorted and show bootstrap glyphicon
+        var activeClass = "info";
+  
+        d3.selectAll("#dc-table-graph th") // Disable all highlighting and icons
+            .classed(activeClass, false)
+          .selectAll("span")
+            .style("visibility", "hidden") // Hide glyphicon
+  
+        var activeSpan = d3.select(this) // Enable active highlight and icon for active column for sorting
+            .classed(activeClass, true)  // Set bootstrap "info" class on active header for highlight
+          .select("span")
+            .style("visibility", "visible");
+  
+        // Toggle sort order state to user desired state
+        d.sort_state = d.sort_state === "ascending" ? "descending" : "ascending";
+  
+        var isAscendingOrder = d.sort_state === "ascending";
+        dataTable
+          .order(isAscendingOrder ? d3.ascending : d3.descending)
+          .sortBy(function(datum) { return datum[d.field_name]; });
+  
+        // Reset glyph icon for all other headers and update this headers icon
+        activeSpan.node().className = ''; // Remove all glyphicon classes
+  
+        // Toggle glyphicon based on ascending/descending sort_state
+        activeSpan.classed(
+          isAscendingOrder ? "glyphicon glyphicon-sort-by-attributes" :
+            "glyphicon glyphicon-sort-by-attributes-alt", true);
+  
+        updateTable();
+        dataTable.redraw();
+        */
+      }
+
 
   $("#inventory-entries-button").click(function(e){
       e.preventDefault();
@@ -351,6 +455,56 @@ $(document).ready(function () {
       //<span class="input-group-text"><i class="ni ni-zoom-split-in"></i></span>
       tableChart = dc.dataTable("#inventory-entries-table");
 
+      var tableHeader = d3.select(".table-header").selectAll("th");
+
+    // Bind data to tableHeader selection.
+    tableHeader = tableHeader.data(
+      [
+        {label: "Seq", field_name: "inv_sequence", sort_state: "ascending"},
+        {label: "Area", field_name: "inv_area", sort_state: "ascending"},
+        {label: "Section", field_name: "inv_section", sort_state: "ascending"},
+        {label: "Item", field_name: "item_id", sort_state: "ascending"},
+        {label: "Qty", field_name: "inv_quantity", sort_state: "descending"} // Note Max Conf row starts off as descending
+      ]
+    );
+
+    // enter() into virtual selection and create new <th> header elements for each table column
+    tableHeader = tableHeader.enter()
+      .append("th")
+        .text(function (d) { return d.label; }) // Accessor function for header titles
+        .on("click", tableHeaderCallback);
+
+        tableHeader.filter(function(d) { return d.label === "Seq"; })
+        .classed("info", true);
+//<span class="btn-inner--icon"><i class="fa fa-plus" aria-hidden="true"></i></span>
+        var tableSpans = tableHeader
+        
+      .append("span") // For Sort glyphicon on active table headers
+        //.classed("glyphicon glyphicon-sort-by-attributes-alt", true)
+        .attr("class","float-right")
+        //.style("visibility", "hidden")
+        .append("i")
+        .attr("class","fa fa-sort")
+        .attr("aria-hidden","true")
+        
+        //.style("visibility", "hidden")
+      .filter(function(d) { return d.label === "Seq"; })
+      .attr("class","fa fa-sort-up")
+        //.attr("class","bg-light")
+        //.style("visibility", "visible");
+
+        //tableHeader.filter(function(d) { return d.label === "Qty"; })
+        //.classed("float-right", true);
+
+        var columnFunctions = [
+            function(d) { return d.inv_sequence; },
+            function(d) { return d.inv_area; },
+            function(d) { return d.inv_section; },
+            function(d) { return d.item_id; },
+            function(d) { return '<span class="float-right">' + d.inv_quantity + '</span>'; },
+          ];  
+
+
       tableChart
                .dimension(allDim)
                .size(Infinity)
@@ -359,6 +513,7 @@ $(document).ready(function () {
                })
                .showSections(true)
                //.columns(thHeaders)
+               /*
                .columns([
                    {
                     label:'<span id="column-seq" onClick="alert(\'a\')" class="float-right">Seq <i class="fa fa-sort" aria-hidden="true"></i></span>',
@@ -415,13 +570,16 @@ $(document).ready(function () {
                     },
                    
                ])
-               .sortBy(function(d){
-                   return d.inv_file_name + " " + d3.format("20")(d.inv_sequence);
-               })
+               */
+               .columns(columnFunctions)
+               //.sortBy(function(d){
+               //    return d.inv_file_name + " " + d3.format("20")(d.inv_sequence);
+               //})
 
                //.sortBy(function(d){
                //    return d.inv_auditor +"_"+ d.inv_area + "_" + d._inv_section +"_" + d.inv_sequence;
                //})
+               .sortBy(function(d){ return d.inv_sequence; })
                .order(d3.ascending)
                .on('renderlet', function (table) {
                                  table.select('tr.dc-table-group').remove();
@@ -802,6 +960,7 @@ $(document).ready(function () {
               setMenu('inventory-menu', inventories)
               setMenu('customer-menu', customers)
               setMenu('supervisor-menu', supervisors)
+              
               break
             case "getInventoryCounts":
                 console.log(msg.inventoryCounts);
@@ -828,6 +987,12 @@ $(document).ready(function () {
 
 
                 updateInventoryInfo(inventoryCounts);
+
+                $('#inventory-menu').val(1);
+                $("#inventory-entries-button").trigger("click");
+
+
+
                 break;
             case 'addInventory':
               var customer = customers.filter(function (d) {
