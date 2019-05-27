@@ -17,9 +17,9 @@ function getInitialData(&$mysql)
     while ($auditor = mysqli_fetch_object($result)) {
         //$itemFound = true;
         $auditors[] = $auditor;
-      
+
     }
-    
+
     $sql = "SELECT id,
                    address_01,
                    address_02,
@@ -64,7 +64,6 @@ function getInitialData(&$mysql)
         $inventories[] = $row;
     }
 
-    
     //if ($itemFound){
 
     //$jsonString = '{"status":"success","auditors":' . json_encode($auditors) . '}';
@@ -75,8 +74,88 @@ function getInitialData(&$mysql)
     //print_r(json_encode($auditors));
     return '{"status":"success"
             ,"auditors":' . json_encode($auditors) .
-           ',"inventories":' . json_encode($inventories) .  
-           ',"customers":' . json_encode($customers) . '}';
+    ',"inventories":' . json_encode($inventories) .
+    ',"customers":' . json_encode($customers) . '}';
+
+}
+/*
+select *
+from retail_inventory a
+
+LEFT JOIN retail_item_master AS b
+ON b.item_id = a.item_id
+ */
+function getInventoryCounts(&$mysql)
+{
+//Before sending the data we are going to process for no found
+
+    $sqlUpdate = "UPDATE retail_inventory SET is_in_item_master = 1";
+    if (!mysqli_query($mysql, $sqlUpdate)) {
+      die('{"status":"failed","message":"Database error on getInventoryCounts update ","error":203}');
+    }
+    
+    $sql = "SELECT a.inv_sequence
+                  ,a.inv_file_name
+            FROM  retail_inventory as a
+            LEFT JOIN retail_item_master as b
+            ON b.item_id = a.item_id
+            WHERE b.item_description is null
+            ORDER BY a.inv_auditor, a.inv_area, a.inv_section, a.inv_sequence";
+    mysqli_query($mysql, 'SET NAMES utf8');
+    $result = mysqli_query($mysql, $sql);
+    $inventoryCounts = array();
+    //$sqlUpdate = "UPDATE retail_inventory SET is_in_item_master = 1";$row->id 
+    if (!mysqli_query($mysql, $sqlUpdate)) {
+      die('{"status":"failed","message":"Database error on getInventoryCounts update ","error":203}');
+    }
+    while ($row = mysqli_fetch_object($result)) {
+      //echo $row->inv_sequence;
+      
+      $sqlUpdate2 = "UPDATE retail_inventory  
+                     SET is_in_item_master = 0   
+                     WHERE inv_sequence >= " . ($row->inv_sequence - 1) . 
+                  " AND inv_sequence <= " . ($row->inv_sequence + 1) . 
+                  " AND inv_file_name = '" . $row->inv_file_name . "'";
+      //. " AND   inv_squence <= " . $row->inv_sequence + 3  . " AND   inv_file_name = '" . $row->inv_file_name . "'";
+      //echo $sqlUpdate2;
+      
+      if (!mysqli_query($mysql, $sqlUpdate2)) {
+        die('{"status":"failed","message":"Database error on getInventoryCounts update2 ","error":203}');
+      }
+        
+    }        
+
+
+    $sql = "SELECT a.inv_sequence
+                ,a.item_id
+                ,a.inv_quantity
+                ,a.inv_area
+                ,a.inv_section
+                ,a.inv_auditor
+                ,a.inv_file_name
+                ,a.is_in_item_master
+                ,b.department
+                ,b.department_description
+                ,b.item_description
+                ,b.item_price
+                ,b.quantity_on_hand
+                ,b.unit_of_measure
+            FROM  retail_inventory as a
+            LEFT JOIN retail_item_master as b
+            ON b.item_id = a.item_id
+            ORDER BY a.inv_auditor, a.inv_area, a.inv_section, a.inv_sequence
+            LIMIT 1000000000";
+    //echo $sql;
+    mysqli_query($mysql, 'SET NAMES utf8');
+    $result = mysqli_query($mysql, $sql);
+    //$itemFound = false;
+    $inventoryCounts = array();
+    while ($row = mysqli_fetch_object($result)) {
+        //$itemFound = true;
+        $inventoryCounts[] = $row;
+    }
+
+    return '{"status":"success","inventoryCounts":' . json_encode($inventoryCounts) . '}';
 
 }
 
@@ -102,6 +181,31 @@ function insertCustomer($email, $customerName, &$mysql)
         //$jsonString = '{"status":"success","message":"Review has been received"}';
     }
     return $jsonString;
+}
+
+function insertInventory($comments, $customerId, $endDateTime, $startDateTime, $supervisorId, &$mysql)
+{
+    $sqlInsert = "INSERT INTO inventory (comments
+                                      ,customer_id
+                                      ,end_date_time
+                                      ,start_date_time
+                                      ,supervisor_id)
+                VALUES('" . mysqli_real_escape_string($mysql, $comments)
+        . "'," . $customerId
+        . "," . $endDateTime
+        . "," . $startDateTime
+        . ",'" . $supervisorId . "')";
+    //echo $sqlInsert;
+    if (!mysqli_query($mysql, $sqlInsert)) {
+        if (mysqli_errno($mysql) == 1062) {
+            die('{"status":"failed","message":"Database error on insertInventory. Already exist","error":204}');
+        }
+        die('{"status":"failed","message":"Database error on insertInventory","error":203}');
+
+    }
+    $idCreated = mysqli_insert_id($mysql);
+    return '{"status":"success","id":' . $idCreated . '}';
+
 }
 
 function insertCustomerOrder($customerId, $chargeCustomerId, $orderDate, $transactionId, $amount, $appId, $jwt, &$mysql)
