@@ -1,5 +1,4 @@
 <?php
-require_once('vendor/autoload.php');
 $host = "localhost";
 $user = "root";
 $password = "gil";
