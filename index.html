@@ -1,506 +1,502 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Start your development with a Design System for Bootstrap 4.">
-  <meta name="author" content="Creative Tim">
-  <title>Retail Physical Inventory Processing</title>
-  <!-- Favicon -->
-  <link href="assets/img/brand/favicon.png" rel="icon" type="image/png">
-  <!-- Icons -->
-  <link href="assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
-  <link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- Argon CSS -->
-  <link type="text/css" href="assets/css/argon.css?v=1.0.1" rel="stylesheet">
-  <!-- Docs CSS -->
-  <link type="text/css" href="assets/css/docs.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
-  <link rel="stylesheet" href="assets/css/dc.css">
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+        <meta content="Start your development with a Design System for Bootstrap 4." name="description">
+        <meta content="Creative Tim" name="author">
+        <title>Retail Physical Inventory Processing</title>
+        <!-- Favicon -->
+        <link
+        href="assets/img/brand/favicon.png" rel="icon" type="image/png">
+        <!-- Icons -->
+        <link href="assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
+        <link
+        href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <!-- Argon CSS -->
+        <link
+        href="assets/css/argon.css?v=1.0.1" rel="stylesheet" type="text/css">
+        <!-- Docs CSS -->
+        <link href="assets/css/docs.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+        <link href="assets/css/dc.css" rel="stylesheet">
+    </head>
 
-<body>
+    <body>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-11" id="general-message">
-          <div class="alert alert-default" role="alert">
-              Informational  messages will be shown here
-          </div>
-      </div>
-      <div class="col-1">
-          <div id="waiting-for-process" class="alert alert-secondary d-none" role="alert">
-              <i class="fa fa-spinner fa-spin text-success" aria-hidden="true"></i>
-          </div>
-        
-      </div>
-    </div>
-    <div class="nav-wrapper">
-      <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-home" data-toggle="tab" href="#tabs-home" role="tab"
-            aria-controls="tabs-home" aria-selected="true"><i class="fa fa-home"></i> Home</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-settings" data-toggle="tab" href="#tabs-settings"
-            role="tab" aria-controls="tabs-icons-settings" aria-selected="false"><i class="fa fa-cog"
-              aria-hidden="true"></i> Settings</a>
-        </li>
-      </ul>
-    </div>
-    <div class="card shadow">
-      <div class="card-body">
-        <div class="tab-content" id="myTabContent">
-          <div class="tab-pane fade show active" id="tabs-home" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+        <div class="container-fluid">
             <div class="row">
-              <div class="col-sm-12 col-md-3">
-                <div class="form-group">
-                  <select class="form-control" id="inventory-menu">
-                  </select>
+                <div class="col-11" id="general-message">
+                    <div class="alert alert-default" role="alert">
+                        Informational  messages will be shown here
+                    </div>
                 </div>
-              </div>
-              <div class="col-sm-12 col-md-3">
-            
-                <button class="btn btn-icon btn-primary" id="home-start-inventory-button" type="button" data-toggle="modal"
-                  data-target="#modal-add-inventory">
-                  <span class="btn-inner--icon"><i class="fa fa-plus" aria-hidden="true"></i></span>
-            
-                  <span class="btn-inner--text">Start Inventory</span>
-            
-                </button>
-            
-              </div>
-              <div class="col-sm-12 col-md-3">
-            
-                  <button disabled="true" class="btn btn-icon btn-primary" id="home-update-inventory-button" type="button" data-toggle="modal"
-                    data-target="#modal-update-inventory">
-                    
-                    <span class="btn-inner--text">Update Inventory</span>
-              
-                  </button>
-              
+                <div class="col-1">
+                    <div class="alert alert-secondary d-none" id="waiting-for-process" role="alert">
+                        <i aria-hidden="true" class="fa fa-spinner fa-spin text-success"></i>
+                    </div>
+
                 </div>
-            
             </div>
-            
-            <!--testing loc start-->
-            <div class="row">
-                <div class="col-sm-12 col-md-2">
-                  <button id="inventory-entries-button" type="button" class="btn btn-success btn-block">
-                    Entries
-                    <span class="badge badge-danger badge-pill" id="inventory-entries">0</span>
-                  </button>
-                </div>
-                <div class="col-sm-12 col-md-2">
-                    
-                    <button id="inventory-auditors-button" type="button" class="btn btn-success btn-block">
-                        Auditors
-                        <span class="badge badge-danger badge-pill" id="inventory-auditors"><strong>0</strong></span>
-                      </button>
-        
-                </div>
-                <div class="col-sm-12 col-md-2">
-                    
-                    <button id="inventory-files-button" type="button" class="btn btn-success btn-block">
-                        Files
-                        <span class="badge badge-danger badge-pill" id="inventory-files">0</span>
-                      </button>
-        
-                </div>
-                <div class="col-sm-12 col-md-2">
-                    
-                    <button id="inventory-areas-button" type="button" class="btn btn-success btn-block">
-                        Areas
-                        <span class="badge badge-danger badge-pill" id="inventory-areas">0</span>
-                      </button>
-        
-                </div>
-               
-                <div class="col-sm-1">
-                  <button id="inventory-delete-button" type="button" class="btn btn-danger btn-lg btn-block">
-                      <i class="fa fa-trash-o" aria-hidden="true"></i>
-                  </button>
-                  
-                </div>
-              </div>
-              <div class="row">
-                  <div class="col-12 text-center">
-                      <button id="chart-reset-button" type="button" id="" class="btn btn-info">
-                         Reset
-                      </button>
-                      <div id="main-chart">
-                        dsfd
-                      </div>
-  
-                  </div>
-                </div>
-            <!--testing loca end-->
-            <div class="row">
-              <div class="col-sm-12">
-                <h1 class="text-center">Showing <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span id="totalsize"></span></h1>
-              </div>
-              <div class="col-sm-12">
-                  <nav aria-label="Page navigation example">
-                      <ul class="pagination justify-content-center">
-                        <li class="page-item">
-                            <button class="page-link" id="page-navigation-previous">
-                                <i class="fa fa-angle-left"></i>
-                                <span class="sr-only">Next</span>
-                              </button>
-                          
-                        </li>
-                        <!--
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                      -->
-                        <li class="page-item">
-                          <button class="page-link" id="page-navigation-next">
-                            <i class="fa fa-angle-right"></i>
-                            <span class="sr-only">Next</span>
-                          </button>
-                            
-                          
-                        </li>
-                      </ul>
-                    </nav>
-                    
-                    <!--
-                  <div id="paging">
-                      Showing <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span id="totalsize"></span>
-                      <input id="last" class="btn" type="Button" value="Last" onclick="javascript:last()" />
-                      <input id="next" class="btn" type="button" value="Next" onclick="javascript:next()"/>
-              </div>
-              -->
+            <div class="nav-wrapper">
+                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                    <li class="nav-item">
+                        <a aria-controls="tabs-home" aria-selected="true" class="nav-link mb-sm-3 mb-md-0 active" data-toggle="tab" href="#tabs-home" id="tabs-icons-home" role="tab">
+                            <i class="fa fa-home"></i>
+                            Home</a>
+                    </li>
 
-              </div>
-             
-              <div class="col-sm-12">
-                  
-                  
-                  <div id="search">
-                    
-                  </div>
-                  <table class='table table-hover table-striped table-bordered table-bordered table-sm' id='inventory-entries-table'>
-                      <thead>
-                        <tr class='table-header'>
-                          <!-- Programmatically insert table headers here -->
-                        </tr>
-                      </thead>
-                    </table>
-                  <!--<table id="inventory-entries-table" class="table table-striped table-bordered table-sm"></table>-->
-              </div>
-              
+                    <li class="nav-item">
+                        <a aria-controls="tabs-icons-settings" aria-selected="false" class="nav-link mb-sm-3 mb-md-0" data-toggle="tab" href="#tabs-settings" id="tabs-icons-settings" role="tab">
+                            <i aria-hidden="true" class="fa fa-cog"></i>
+                            Settings</a>
+                    </li>
+                </ul>
             </div>
-            
-            
-            <!--
-            <div class="btn-group">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-                  Select Inventory
-                </button>
-                <div id="inventory-menu" class="dropdown-menu dropdown-menu">
-                  <button class="dropdown-item" id="inventory-dropdown-1" type="button">5/24/2019</button>
-                  <button class="dropdown-item" id="inventory-dropdown-2" type="button">5/24/2019</button>
-                </div>
-              </div>
-            -->
-            
-            <!-- Modal -->
-            <div class="modal fade" id="modal-add-inventory" tabindex="-1" role="dialog"
-              aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                      <div id="add-inventory-modal-message" class="d-none">
-                          <div class="alert alert-default" role="alert">
-                              Informational  messages will be shown here
-                          </div>
-
-                      </div>
-                  </div>
-
-                  <div class="modal-body">
-                    <form role="form">
-                      <div class="row">
-                        <div class="col-3">
-                          Customer
-                        </div>
-                        <div class="col-9">
-                            
-                            <select class="form-control" id="customer-menu">
-                            </select>
-                          <!--
-                          <div class="btn-group">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                              aria-haspopup="true" aria-expanded="false">
-                              Customer
-                            </button>
-                            <div id="customer-menu" class="dropdown-menu dropdown-menu">
-                              <button class="dropdown-item" id="customer-dropdown-12" type="button">Jose Ponce</button>
-                              <button class="dropdown-item" id="customer-dropdown-17" type="button">Gilberto
-                                Gomez</button>
-                            </div>
-                          </div>
-                        -->
-                        </div>
-                        <!--
-                        <div class="col-4 text-center">
-                          <span id="customer-name">Jose Ponce</span>
-                        </div>
-                      -->
-                      </div>
-                      <div class="row">
-                        <div class="col-3">
-                          Supervisor
-                        </div>
-                        <div class="col-9">
-                            <select class="form-control" id="supervisor-menu">
-                            </select>
-                          <!--
-                          <div class="btn-group">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                              aria-haspopup="true" aria-expanded="false">
-                              Supervisor
-                            </button>
-                            <div id="supervisor-menu" class="dropdown-menu dropdown-menu">
-                              <button class="dropdown-item" id="supervisor-dropdown-AB1234" type="button">AB 1245</button>
-                              <button class="dropdown-item" id="supervisor-dropdown-AB4567" type="button">AB 4567
-                              </button>
-                            </div>
-                          </div>
-                        -->
-                        </div>
-                        <!--
-                        <div class="col-4 text-center">
-                          <span id="Supervisor-name">Abc 1234</span>
-                        </div>
-                      -->
-                      </div>
-                      <div class="row">
-                        <div class="col-3">
-                          Start Date
-                        </div>
-                        <div class="col-4">
-                          <div class="form-group">
-                            <div id="inventory-start-date-holder" class="input-group input-group-alternative">
-                              <!--
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
-                              </div>
-                              <input name="inventory-start-date" id="inventory-start-date"
-                                class="form-control" placeholder="Select date" type="date">
-                            -->
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-5 text-center">
-                            <select class="form-control" id="start-time-menu">
-                            </select>
-                            <!--
-                            <div class="form-group">
-                                <div class="input-group input-group-alternative">
-                                    <div class="input-group-prepend">
-                                      <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="tab-content" id="myTabContent">
+                        <div aria-labelledby="tabs-icons-text-1-tab" class="tab-pane fade show active" id="tabs-home" role="tabpanel">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="form-group">
+                                        <select class="form-control" id="inventory-menu"></select>
                                     </div>
-                                    <input name="inventory-start-time" id="inventory-start-time"
-                                      class="form-control" type="time"
-                                      >
-                                  </div>
-                              </div>
-                            -->
-                          <!--
-                          <div class="row">
-                            <div class="col-6">
-                              
-                              <div class="btn-group">
-                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                                  aria-haspopup="true" aria-expanded="false">
-                                  Time
-                                </button>
-                                <div id="start-time-menu" class="dropdown-menu dropdown-menu">
-                                  <button class="dropdown-item" id="start-time-dropdown-1" type="button">6:00 PM
-                                    </button>
-                                  <button class="dropdown-item" id="start-time-dropdown-2" type="button">6:30 PM
-                                  </button>
                                 </div>
-                              </div>
-                           
+                                <div class="col-sm-12 col-md-3">
+
+                                    <button class="btn btn-icon btn-primary" data-target="#modal-add-inventory" data-toggle="modal" id="home-start-inventory-button" type="button">
+                                        <span class="btn-inner--icon">
+                                            <i aria-hidden="true" class="fa fa-plus"></i>
+                                        </span>
+
+                                        <span class="btn-inner--text">Start Inventory</span>
+
+                                    </button>
+
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+
+                                    <button class="btn btn-icon btn-primary" data-target="#modal-update-inventory" data-toggle="modal" disabled="true" id="home-update-inventory-button" type="button">
+
+                                        <span class="btn-inner--text">Update Inventory</span>
+
+                                    </button>
+
+                                </div>
 
                             </div>
-                            <div class="col-6">
-                              <span id="start-time">6:00 PM</span>
-                            </div>
-                          </div>
-                           -->
 
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-3">
-                          End Date
-                        </div>
-                        <div class="col-4">
-                          <div class="form-group">
-                            <div id="inventory-end-date-holder" class="input-group input-group-alternative">
-                              <!--
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
-                              </div>
-                              
-                              <input name="inventory-end-date" id="inventory-end-date" class="form-control"
-                                placeholder="Select date" type="date">
-                            -->
+                            <!--testing loc start-->
+                            <div class="row">
+                                <div class="col-sm-12 col-md-2">
+                                    <button class="btn btn-success btn-block" id="inventory-entries-button" type="button">
+                                        Entries
+                                        <span class="badge badge-danger badge-pill" id="inventory-entries">0</span>
+                                    </button>
+                                </div>
+                                <div class="col-sm-12 col-md-2">
+
+                                    <button class="btn btn-success btn-block" id="inventory-auditors-button" type="button">
+                                        Auditors
+                                        <span class="badge badge-danger badge-pill" id="inventory-auditors">
+                                            <strong>0</strong>
+                                        </span>
+                                    </button>
+
+                                </div>
+                                <div class="col-sm-12 col-md-2">
+
+                                    <button class="btn btn-success btn-block" id="inventory-files-button" type="button">
+                                        Files
+                                        <span class="badge badge-danger badge-pill" id="inventory-files">0</span>
+                                    </button>
+
+                                </div>
+                                <div class="col-sm-12 col-md-2">
+
+                                    <button class="btn btn-success btn-block" id="inventory-areas-button" type="button">
+                                        Areas
+                                        <span class="badge badge-danger badge-pill" id="inventory-areas">0</span>
+                                    </button>
+
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <button class="btn btn-danger btn-lg btn-block" id="inventory-delete-button" type="button">
+                                        <i aria-hidden="true" class="fa fa-trash-o"></i>
+                                    </button>
+
+                                </div>
                             </div>
-                          </div>
-                        </div>
-                        <div class="col-5 text-center">
-                            <select class="form-control" id="end-time-menu">
-                              </select>
-                            <!--
-                            <div class="form-group">
-                                <div class="input-group input-group-alternative">
-                                    <div class="input-group-prepend">
-                                      <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <button class="btn btn-info" id="" id="chart-reset-button" type="button">
+                                        Reset
+                                    </button>
+                                    <div id="main-chart">
+                                        dsfd
                                     </div>
-                                    <input name="inventory-end-time" id="inventory-end-time"
-                                      class="form-control" type="time"
-                                      >
-                                  </div>
-                              </div>
-                            -->
+
+                                </div>
+                            </div>
+                            <!--testing loca end-->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h1 class="text-center">Showing
+                                        <span id="begin"></span>-<span id="end"></span>
+                                        of
+                                        <span id="size"></span>
+                                        <span id="totalsize"></span>
+                                    </h1>
+                                </div>
+                                <div class="col-sm-12">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination justify-content-center">
+                                            <li class="page-item">
+                                                <button class="page-link" id="page-navigation-previous">
+                                                    <i class="fa fa-angle-left"></i>
+                                                    <span class="sr-only">Next</span>
+                                                </button>
+
+                                            </li>
+                                            <!--
+                                                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                                                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                                  -->
+                                            <li class="page-item">
+                                                <button class="page-link" id="page-navigation-next">
+                                                    <i class="fa fa-angle-right"></i>
+                                                    <span class="sr-only">Next</span>
+                                                </button>
+
+
+                                            </li>
+                                        </ul>
+                                    </nav>
+
+                                    <!--
+                                                      <div id="paging">
+                                                          Showing <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span id="totalsize"></span>
+                                                          <input id="last" class="btn" type="Button" value="Last" onclick="javascript:last()" />
+                                                          <input id="next" class="btn" type="button" value="Next" onclick="javascript:next()"/>
+                                                  </div>
+                                                  -->
+
+                                </div>
+
+                                <div class="col-sm-12">
+
+
+                                    <div id="search"></div>
+                                    <table class='table table-hover table-striped table-bordered table-bordered table-sm' id='inventory-entries-table'>
+                                        <thead>
+                                            <tr
+                                                class='table-header'><!-- Programmatically insert table headers here -->
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <!--<table id="inventory-entries-table" class="table table-striped table-bordered table-sm"></table>-->
+                                </div>
+
+                            </div>
+
+
+                            <!--
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                              aria-haspopup="true" aria-expanded="false">
+                                              Select Inventory
+                                            </button>
+                                            <div id="inventory-menu" class="dropdown-menu dropdown-menu">
+                                              <button class="dropdown-item" id="inventory-dropdown-1" type="button">5/24/2019</button>
+                                              <button class="dropdown-item" id="inventory-dropdown-2" type="button">5/24/2019</button>
+                                            </div>
+                                          </div>
+                                        -->
+
+                            <!-- Modal -->
+                            <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="modal-add-inventory" role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <div class="d-none" id="add-inventory-modal-message">
+                                                <div class="alert alert-default" role="alert">
+                                                    Informational  messages will be shown here
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <form role="form">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        Customer
+                                                    </div>
+                                                    <div class="col-9">
+
+                                                        <select class="form-control" id="customer-menu"></select>
+                                                        <!--
+                                                                                  <div class="btn-group">
+                                                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                                                                      aria-haspopup="true" aria-expanded="false">
+                                                                                      Customer
+                                                                                    </button>
+                                                                                    <div id="customer-menu" class="dropdown-menu dropdown-menu">
+                                                                                      <button class="dropdown-item" id="customer-dropdown-12" type="button">Jose Ponce</button>
+                                                                                      <button class="dropdown-item" id="customer-dropdown-17" type="button">Gilberto
+                                                                                        Gomez</button>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                -->
+                                                    </div>
+                                                    <!--
+                                                                            <div class="col-4 text-center">
+                                                                              <span id="customer-name">Jose Ponce</span>
+                                                                            </div>
+                                                                          -->
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        Supervisor
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <select class="form-control" id="supervisor-menu"></select>
+                                                        <!--
+                                                                                  <div class="btn-group">
+                                                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                                                                      aria-haspopup="true" aria-expanded="false">
+                                                                                      Supervisor
+                                                                                    </button>
+                                                                                    <div id="supervisor-menu" class="dropdown-menu dropdown-menu">
+                                                                                      <button class="dropdown-item" id="supervisor-dropdown-AB1234" type="button">AB 1245</button>
+                                                                                      <button class="dropdown-item" id="supervisor-dropdown-AB4567" type="button">AB 4567
+                                                                                      </button>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                -->
+                                                    </div>
+                                                    <!--
+                                                                            <div class="col-4 text-center">
+                                                                              <span id="Supervisor-name">Abc 1234</span>
+                                                                            </div>
+                                                                          -->
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        Start Date
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <div
+                                                                class="input-group input-group-alternative" id="inventory-start-date-holder"><!--
+                                                                                                  <div class="input-group-prepend">
+                                                                                                    <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                                                  </div>
+                                                                                                  <input name="inventory-start-date" id="inventory-start-date"
+                                                                                                    class="form-control" placeholder="Select date" type="date">
+                                                                                                -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-5 text-center">
+                                                        <select class="form-control" id="start-time-menu"></select>
+                                                        <!--
+                                                                                    <div class="form-group">
+                                                                                        <div class="input-group input-group-alternative">
+                                                                                            <div class="input-group-prepend">
+                                                                                              <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                                                                            </div>
+                                                                                            <input name="inventory-start-time" id="inventory-start-time"
+                                                                                              class="form-control" type="time"
+                                                                                              >
+                                                                                          </div>
+                                                                                      </div>
+                                                                                    -->
+                                                        <!--
+                                                                                  <div class="row">
+                                                                                    <div class="col-6">
+                                                                                      
+                                                                                      <div class="btn-group">
+                                                                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                                                                          aria-haspopup="true" aria-expanded="false">
+                                                                                          Time
+                                                                                        </button>
+                                                                                        <div id="start-time-menu" class="dropdown-menu dropdown-menu">
+                                                                                          <button class="dropdown-item" id="start-time-dropdown-1" type="button">6:00 PM
+                                                                                            </button>
+                                                                                          <button class="dropdown-item" id="start-time-dropdown-2" type="button">6:30 PM
+                                                                                          </button>
+                                                                                        </div>
+                                                                                      </div>
+                                                                                   
+                                                        
+                                                                                    </div>
+                                                                                    <div class="col-6">
+                                                                                      <span id="start-time">6:00 PM</span>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                   -->
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        End Date
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <div
+                                                                class="input-group input-group-alternative" id="inventory-end-date-holder"><!--
+                                                                                                  <div class="input-group-prepend">
+                                                                                                    <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                                                  </div>
+                                                                                                  
+                                                                                                  <input name="inventory-end-date" id="inventory-end-date" class="form-control"
+                                                                                                    placeholder="Select date" type="date">
+                                                                                                -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-5 text-center">
+                                                        <select class="form-control" id="end-time-menu"></select>
+                                                        <!--
+                                                                                    <div class="form-group">
+                                                                                        <div class="input-group input-group-alternative">
+                                                                                            <div class="input-group-prepend">
+                                                                                              <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                                                                            </div>
+                                                                                            <input name="inventory-end-time" id="inventory-end-time"
+                                                                                              class="form-control" type="time"
+                                                                                              >
+                                                                                          </div>
+                                                                                      </div>
+                                                                                    -->
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <textarea class="form-control" id="inventory-comments" placeholder="Write comments here..." rows="3"></textarea>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <button class="btn btn-primary" id="save-inventory-button" type="button">Save changes</button>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <button class="btn btn-secondary float-right" data-dismiss="modal" id="cancel-inventory-button" type="button">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-12">
-                          <textarea class="form-control" id="inventory-comments" rows="3"
-                            placeholder="Write comments here..."></textarea>
-                        </div>
 
-                      </div>
-                      <div class="row">
-                        <div class="col-6">
-                          <button id="save-inventory-button" type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                        <div class="col-6">
-                          <button id="cancel-inventory-button" type="button" class="btn btn-secondary float-right"
-                            data-dismiss="modal">Cancel</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-
+                        <div aria-labelledby="tabs-icons-settings" class="tab-pane fade" id="tabs-settings" role="tabpanel"></div>
+                    </div>
                 </div>
-              </div>
             </div>
-
-          </div>
-
-          <div class="tab-pane fade" id="tabs-settings" role="tabpanel" aria-labelledby="tabs-icons-settings">
-            
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  </div>
 
-  <!--
-  <div class="container-fluid" id="additional-info">
-      <div class="row">
-        <div class="col-sm-12 col-md-2">
-          <button type="button" class="btn btn-success btn-block">
-            Entries
-            <span class="badge badge-danger badge-pill" id="inventory-entries">0</span>
-          </button>
-        </div>
-        <div class="col-sm-12 col-md-2">
-            
-            <button type="button" class="btn btn-success btn-block">
-                Auditors
-                <span class="badge badge-danger badge-pill" id="inventory-auditors"><strong>0</strong></span>
+    <!--
+      <div class="container-fluid" id="additional-info">
+          <div class="row">
+            <div class="col-sm-12 col-md-2">
+              <button type="button" class="btn btn-success btn-block">
+                Entries
+                <span class="badge badge-danger badge-pill" id="inventory-entries">0</span>
               </button>
-
-        </div>
-        <div class="col-sm-12 col-md-2">
-            
-            <button type="button" class="btn btn-success btn-block">
-                Files
-                <span class="badge badge-danger badge-pill" id="inventory-files">0</span>
+            </div>
+            <div class="col-sm-12 col-md-2">
+                
+                <button type="button" class="btn btn-success btn-block">
+                    Auditors
+                    <span class="badge badge-danger badge-pill" id="inventory-auditors"><strong>0</strong></span>
+                  </button>
+    
+            </div>
+            <div class="col-sm-12 col-md-2">
+                
+                <button type="button" class="btn btn-success btn-block">
+                    Files
+                    <span class="badge badge-danger badge-pill" id="inventory-files">0</span>
+                  </button>
+    
+            </div>
+            <div class="col-sm-12 col-md-2">
+                
+                <button type="button" class="btn btn-success btn-block">
+                    Areas
+                    <span class="badge badge-danger badge-pill" id="inventory-areas">0</span>
+                  </button>
+    
+            </div>
+           
+            <div class="col-sm-1">
+              <button type="button" id="" class="btn btn-danger btn-lg btn-block">
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>
               </button>
-
-        </div>
-        <div class="col-sm-12 col-md-2">
-            
-            <button type="button" class="btn btn-success btn-block">
-                Areas
-                <span class="badge badge-danger badge-pill" id="inventory-areas">0</span>
-              </button>
-
-        </div>
-       
-        <div class="col-sm-1">
-          <button type="button" id="" class="btn btn-danger btn-lg btn-block">
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
-          </button>
+              
+            </div>
+          </div>
           
-        </div>
+        
+        
       </div>
-      
-    
-    
-  </div>
-  -->
+      -->
 
 
+    <footer class="footer has-cards">
 
-  <footer class="footer has-cards">
-
-    <div class="container">
-      <div class="row align-items-center justify-content-md-between">
-        <div class="col-md-6">
-          <div class="copyright">
-            &copy; 2019
-            <a href="https://www.poncesolutions.com" target="_blank">PonceSolutions.com</a>.
-          </div>
+        <div class="container">
+            <div class="row align-items-center justify-content-md-between">
+                <div class="col-md-6">
+                    <div class="copyright">
+                        &copy; 2019
+                        <a href="https://www.poncesolutions.com" target="_blank">PonceSolutions.com</a>.
+                    </div>
+                </div>
+                <div
+                    class="col-md-6"><!--
+                                  <ul class="nav nav-footer justify-content-end">
+                                    <li class="nav-item">
+                                      <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a href="https://github.com/creativetimofficial/argon-design-system/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
+                                    </li>
+                                  </ul>
+                        		  -->
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-          <!--
-          <ul class="nav nav-footer justify-content-end">
-            <li class="nav-item">
-              <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
-            </li>
-            <li class="nav-item">
-              <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
-            </li>
-            <li class="nav-item">
-              <a href="https://github.com/creativetimofficial/argon-design-system/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
-            </li>
-          </ul>
-		  -->
-        </div>
-      </div>
-    </div>
-  </footer>
-  <!-- Core -->
-  <script src="assets/vendor/jquery/jquery.min.js"></script>
-  <script src="assets/vendor/popper/popper.min.js"></script>
-  <script src="assets/vendor/bootstrap/bootstrap.min.js"></script>
-  <script src="assets/vendor/headroom/headroom.min.js"></script>
+    </footer>
+    <!-- Core -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/popper/popper.min.js"></script>
+    <script src="assets/vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="assets/vendor/headroom/headroom.min.js"></script>
 
-  <!-- Argon JS -->
-  <script src="assets/js/argon.js?v=1.0.1"></script>
-  <script src="assets/js/d3.js"></script>
-  <script src="assets/js/crossfilter.js"></script>
-  <script src="assets/js/dc.js"></script>
+    <!-- Argon JS -->
+    <script src="assets/js/argon.js?v=1.0.1"></script>
+    <script src="assets/js/d3.js"></script>
+    <script src="assets/js/crossfilter.js"></script>
+    <script src="assets/js/dc.js"></script>
 
-  
-  <script src="assets/js/process-inventory.js"></script>
-  
-</body>
 
-</html>
+    <script src="assets/js/process-inventory.js"></script>
+
+</body></html>
