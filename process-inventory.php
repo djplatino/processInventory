@@ -44,6 +44,41 @@ if (isset($_POST['action'])) {
             //echo $currentInventory["customer_id"];
             //print_r($currentInventory);
             break;
+        case "uploadFile":
+            $fileName=""; 
+            //print_r($_POST);
+            foreach ($_FILES["files"]["error"] as $key => $error)
+            {
+                if ($error == UPLOAD_ERR_OK){
+                    $name = $_FILES["files"]["name"][$key];
+                    $ext = pathinfo($name, PATHINFO_EXTENSION);
+                    $ext = strtolower($ext);
+                    switch($ext) {
+                        case "json":
+                            if(file_exists('uploads/'.$name)){
+                                unlink('uploads/'.$name);
+                            }
+                            move_uploaded_file( $_FILES["files"]["tmp_name"][$key], "uploads/" . $name);
+                            $json = file_get_contents("uploads/". $name);
+                            //Decode JSON
+                            //$json_data = json_decode($json,true);
+                            $json_data = json_decode($json);
+
+                            //Print data
+                            //print_r($json_data);
+                            //print_r($json_data["inventory"][0]);
+                            //print_r($json_data->inventory[0]->area);
+
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }    
+
+
+            echo '{"status":"success","data":' . $json . '}';
+            break;
         default:
             die('{"status":"failed","message":"The action has not been defined", "error":1002}');
             break;
