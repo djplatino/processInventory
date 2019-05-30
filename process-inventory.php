@@ -44,6 +44,101 @@ if (isset($_POST['action'])) {
             //echo $currentInventory["customer_id"];
             //print_r($currentInventory);
             break;
+        case "deleteInventory":
+            $deleteCounts    = $POST['deleteCounts'];
+            $deleteFiles     = $POST['deleteFiles'];
+            $areaToDelete    = $POST['areaToDelete'];
+            $fileToDelete    = $POST['fileToDelete'];
+            $sectionToDelete = $POST['sectionToDelete'];
+            $auditorToDelete = $POST['auditorToDelete'];
+            
+            
+            echo $deleteCounts;
+            echo $deleteFiles;
+            /*
+            if ($deleteCounts == "Y" && $deleteFiles == "Y") {
+                echo '{"status":"success","info":' . $deleteCounts . '}';
+            }
+            else {
+                echo '{"status":"success","more info":' . $deleteFiles . '}';
+            }
+            */
+
+
+            
+            switch(true){
+                case ($deleteCounts == "Y" 
+                  && $deleteFiles == "Y" 
+                  && $areaToDelete == ""
+                  && $sectionToDelete == ""
+                  && $fileToDelete == ""
+                  && $auditorToDelete == ""):
+                    echo '{"status":"success","info0":' . $deleteCounts . '}';
+                    break;
+                case ($deleteCounts == "Y" 
+                && $deleteFiles == "N" 
+                && $areaToDelete == ""
+                && $sectionToDelete == ""
+                && $fileToDelete == ""
+                && $auditorToDelete == ""):    
+                    echo '{"status":"success","info1":' . $deleteCounts . '}';
+                case ($deleteCounts == "N" 
+                    && $deleteFiles == "Y" 
+                    && $areaToDelete == ""
+                    && $sectionToDelete == ""
+                    && $fileToDelete == ""
+                    && $auditorToDelete == ""):    
+                        echo '{"status":"success","info2":' . $deleteCounts . '}';
+                    break;
+                case ($deleteCounts == "N" 
+                    && $deleteFiles == "N" 
+                    && $areaToDelete == ""
+                    && $sectionToDelete == ""
+                    && $fileToDelete != ""
+                    && $auditorToDelete == ""):    
+                        echo '{"status":"success","info3":' . $deleteCounts . '}';
+                    break;
+                case ($deleteCounts == "N" 
+                    && $deleteFiles == "N" 
+                    && $areaToDelete == ""
+                    && $sectionToDelete == ""
+                    && $fileToDelete == ""
+                    && $auditorToDelete != ""):    
+                        echo '{"status":"success","info4":' . $deleteCounts . '}';
+                    break;
+                case ($deleteCounts == "N" 
+                    && $deleteFiles == "N" 
+                    && $areaToDelete == "ALL"
+                    && $sectionToDelete == "ALL"
+                    && $fileToDelete == ""
+                    && $auditorToDelete == ""):    
+                        echo '{"status":"success","info6":' . $deleteCounts . '}';
+                case ($deleteCounts == "N" 
+                    && $deleteFiles == "N" 
+                    && $areaToDelete != ""
+                    && $areaToDelete != "ALL"
+                    && $sectionToDelete == "ALL"
+                    && $fileToDelete == ""
+                    && $auditorToDelete == ""):    
+                        echo '{"status":"success","info7":' . $deleteCounts . '}';
+                    break;
+                case ($deleteCounts == "N" 
+                    && $deleteFiles == "N" 
+                    && $areaToDelete != ""
+                    && $areaToDelete != "ALL"
+                    && $sectionToDelete != "ALL"
+                    && $sectionToDelete != ""
+                    && $fileToDelete == ""
+                    && $auditorToDelete == ""):    
+                        echo '{"status":"success","info8":' . $deleteCounts . '}';
+                    break;
+                default:
+                    echo '{"status":"success","infoD":' . $deleteFiles . '}';
+                    break;
+            }
+
+            
+            break;
         case "uploadFile":
             $fileName=""; 
             //print_r($_POST);

@@ -660,11 +660,45 @@ $(document).ready(function() {
 
   })
 
-  $("#modal-delete-delete-counts-toggle").click(function(e){
-     console.log("clicked");
-     console.log($('#modal-delete-delete-counts-toggle').is(":checked"));
-     //$('#modal-delete-delete-counts-toggle').val("") = !$('#modal-delete-delete-counts-toggle').val();
+  $("#modal-delete-counts-toggle").click(function(e){
+     updateDeleteLabels();
+  });
 
+  $("#modal-delete-inventory-button").click(function(e){
+
+    var deleteCounts = "N";
+    var deleteFiles  = "N";
+
+    if ($('#modal-delete-counts-toggle').is(":checked")) {
+        deleteCounts = "Y";
+    }
+    
+    if ($('#modal-delete-files-toggle').is(":checked")) {
+        deleteFiles  = "Y";
+    }
+    var params = {
+        action: 'deleteInventory',
+        "deleteCounts":deleteCounts,
+        "deleteFiles": deleteFiles,
+        "fileToDelete":"x",
+        "areaToDelete":"x",
+        "sectionToDelete":"x",
+        "auditorToDelete":""
+    }
+    console.log(params)
+    // $('#modal-add-inventory').modal('hide')
+    executeAjax('deleteInventory', params)
+  });
+
+  $("#modal-delete-files-toggle").click(function(e){
+    updateDeleteLabels();
+ });
+
+  $('#modal-delete-inventory-counts').on('show.bs.modal', function (e) {
+    // do something...
+    $('#modal-delete-counts-toggle').prop("checked",false);
+    $('#modal-delete-files-toggle').prop("checked",false);
+    updateDeleteLabels();
   })
 
   $("#page-navigation-next").click(function(e) {
@@ -943,6 +977,32 @@ $(document).ready(function() {
           */
   }
 
+  function updateDeleteLabels(){
+    if ($('#modal-delete-counts-toggle').is(":checked")) {
+        $("#modal-delete-counts-label").html("Delete counts")
+        //$('#modal-delete-counts-toggle').prop("checked",false);
+    }
+    else {
+        $("#modal-delete-counts-label").html("Don't delete counts")
+    }
+    if ($('#modal-delete-files-toggle').is(":checked")) {
+        $("#modal-delete-files-label").html("Delete files")
+        //$('#modal-delete-counts-toggle').prop("checked",false);
+    }
+    else {
+        $("#modal-delete-files-label").html("Don't delete files")
+    }
+
+    if ($('#modal-delete-counts-toggle').is(":checked")  || $('#modal-delete-files-toggle').is(":checked"))   { 
+        //$("#modal-delete-inventory-button").prop("disabled",false);
+
+    }
+    else {
+        //$("#modal-delete-inventory-button").prop("disabled",true);
+    }
+      
+  }
+
   function updateInventoryInfo(data) {
       //var ctx = crossfilter(data);
       //var allCounts = ndx.groupAll();
@@ -1003,6 +1063,9 @@ $(document).ready(function() {
 
               if (msg.status == 'success') {
                   switch (action) {
+                      case "deleteInventory":
+                          console.log("deleteInventory");
+                          break;
                       case 'getInitialData':
                           inventories = msg.inventories
                           auditors = msg.auditors
@@ -1033,7 +1096,7 @@ $(document).ready(function() {
                           setMenu('customer-menu', customers)
                           setMenu('supervisor-menu', supervisors)
 
-                          break
+                          break;
                       case "getInventoryCounts":
                           console.log(msg.inventoryCounts);
 
@@ -1101,9 +1164,9 @@ $(document).ready(function() {
                           $('#inventory-menu').val(msg.currentInventory.id)
                           $("#modal-add-inventory").modal("hide");
 
-                          break
+                          break;
                       default:
-                          break
+                          break;
                   }
               } else {
                   $('#general-message').empty()
