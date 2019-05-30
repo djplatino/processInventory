@@ -660,6 +660,13 @@ $(document).ready(function() {
 
   })
 
+  $("#modal-delete-delete-counts-toggle").click(function(e){
+     console.log("clicked");
+     console.log($('#modal-delete-delete-counts-toggle').is(":checked"));
+     //$('#modal-delete-delete-counts-toggle').val("") = !$('#modal-delete-delete-counts-toggle').val();
+
+  })
+
   $("#page-navigation-next").click(function(e) {
       next();
 
@@ -668,6 +675,7 @@ $(document).ready(function() {
       last();
 
   })
+  
 
   $('#save-inventory-button').click(function(e) {
       e.preventDefault()

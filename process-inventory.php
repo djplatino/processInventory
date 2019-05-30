@@ -103,7 +103,11 @@ if (isset($_POST['action'])) {
         move_uploaded_file( $_FILES["inventory"]["tmp_name"], "uploads/" . $name);
         //move_uploaded_file( $_FILES["files"]["tmp_name"][$key], "uploads/" . $name);
         $json = file_get_contents("uploads/". $name);
+        //print_r($json);
         $json_data = json_decode($json);
+        //print_r(json_last_error());
+        //print_r($json_data);
+        //echo $json_data;
         //print_r($json);
         //echo $name . " " . $ext;
 
