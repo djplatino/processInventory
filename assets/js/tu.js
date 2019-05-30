@@ -20,8 +20,8 @@ $(document).ready(function () {
           if(!!file.name.match(/(\.|\/)(json|jpe?g|png|xml)$/i)){
           //alert("valid");
           var formdata = new FormData();
-          formdata.append("files[]", file);
-          formdata.append("action","uploadFile");
+          formdata.append("files", file);
+          //formdata.append("action","uploadFile");
           
           
           //console.log(input.files[0]);

@@ -47,6 +47,8 @@ if (isset($_POST['action'])) {
         case "uploadFile":
             $fileName=""; 
             //print_r($_POST);
+            print_r($_FILES);
+            echo count($_FILES);
             foreach ($_FILES["files"]["error"] as $key => $error)
             {
                 if ($error == UPLOAD_ERR_OK){
@@ -84,7 +86,41 @@ if (isset($_POST['action'])) {
             break;
     }
 } else {
-    die('{"status":"failed","message":"The action was not set", "error":1001}');
+    //die('{"status":"failed","message":"The action was not set", "error":1001}');
+    //print_r(count($_FILES));
+    //foreach ($_FILES["files"]["error"] as $key => $error)
+    //{
+    //};
+    //print_r($_FILES);
+    if (count($_FILES) > 0 && $_FILES["inventory"]["error"] == 0) {
+        //print_r($_FILES["files"]["error"]);
+        $name = $_FILES["inventory"]["name"];
+        $ext = pathinfo($name, PATHINFO_EXTENSION);
+        $ext = strtolower($ext);
+        if(file_exists('uploads/'.$name)){
+            unlink('uploads/'.$name);
+        }
+        move_uploaded_file( $_FILES["inventory"]["tmp_name"], "uploads/" . $name);
+        //move_uploaded_file( $_FILES["files"]["tmp_name"][$key], "uploads/" . $name);
+        $json = file_get_contents("uploads/". $name);
+        $json_data = json_decode($json);
+        //print_r($json);
+        //echo $name . " " . $ext;
+
+        echo '{"status":"sucess","message":"' . $name . ' was uploaded"}';
+        //echo '{"status":"sucess","message":"error"}';
+
+    }
+    else {
+        echo '{"status":"sucess","message":"error"}';
+    }
+   
+    //json$json = json_encode($_FILES);
+    //foreach ($_FILES["files"]["error"] as $key => $error)
+    //{
+   // }
+   
+    
 }
 
 function is_localhost()
