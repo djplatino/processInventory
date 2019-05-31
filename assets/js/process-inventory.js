@@ -294,6 +294,10 @@ $(document).ready(function() {
       console.log(ndx.size());
       $('#main-chart').empty()
       var chart = dc.pieChart('#main-chart');
+      //var colorScale = d3.scale.ordinal().domain(["banana", "cherry", "blueberry"])
+                                  // .range(["#eeff00", "#ff0022", "#2200ff"]);
+
+      //pie.colors(function(d){ return colorScale(d.fruitType); });
       chart
           .width(fluidWidth)
           .height(480)
@@ -304,26 +308,74 @@ $(document).ready(function() {
           .drawPaths(true)
           .dimension(areasDim)
           .group(areasGroup)
+          
+          //.colors(function(d){ return colorScale(d.fruitType); })
           .legend(dc.legend());
+          //chart.colors(d3.scale.ordinal().range(['red','green','blue']));
       // example of formatting the legend via svg
       // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
       chart.on('pretransition', function(chart) {
           chart.selectAll('.dc-legend-item text')
               .text('')
+              .on("click",function(d){
+                console.log(d);
+            })
               .append('tspan')
-              .text(function(d) {
+              
+
+            .text(function(d) {
                   //console.log(d);
                   //console.log(d.inv_file_name);
-                  return d.name;
+                  //<i class="fa fa-trash-o" aria-hidden="true"></i>
+                  return d.name ;
               })
               .append('tspan')
               .attr('x', 150)
               .attr('text-anchor', 'end')
               .text(function(d) {
                   return d.data;
-              });
+              })
+              //.append("i")
+              //.attr("class","fa fa-trash-o text-warning")
+              //.attr("aria-hidden","true");
       });
+      /*
+      chart.on('renderlet', function(chart) {
+        chart.selectAll('rect').on('click', function(d) {
+           console.log('click!', d);
+        });
+     });
+     */
+    /*
+    chart.renderlet(function(_chart){
+        _chart.selectAll(".pie-slice")
+        .on("click",function(d){
+            console.log(d);
+        })
+            //console.log(_chart.selectAll(".pie-slice").classed("selected"));
+            //console.log(d)
+            //d3.select("g.sliceActive").classed("slice5")
+            //console.log(_chart.selectAll(".pie-slice"));
+          //_chart.filter(null);
+       // });
+        
+  });
+  */
+  
+    /*
+     
+      chart.on('filtered.monitor', function(chart, filter) {
+        // report the filter applied
+        console.log("handled");
+        //console.log(filter.selectAll('.clicked').data());
+        console.log(filter);
+        console.log(chart);
+      });
+      */
+      
       chart.render();
+
+      
   })
 
   function tableHeaderCallback(d) {
