@@ -718,8 +718,9 @@ $(document).ready(function() {
 
   $("#modal-delete-inventory-button").click(function(e){
 
-    var deleteCounts = "N";
-    var deleteFiles  = "N";
+    var deleteCounts    = "N";
+    var deleteFiles     = "N";
+    var deleteItemMaster = "N";
 
     if ($('#modal-delete-counts-toggle').is(":checked")) {
         deleteCounts = "Y";
@@ -728,13 +729,18 @@ $(document).ready(function() {
     if ($('#modal-delete-files-toggle').is(":checked")) {
         deleteFiles  = "Y";
     }
+    
+    if ($('#modal-delete-item-master-toggle').is(":checked")) {
+        deleteItemMaster  = "Y";
+    }
     var params = {
         action: 'deleteInventory',
         "deleteCounts":deleteCounts,
         "deleteFiles": deleteFiles,
-        "fileToDelete":"x",
-        "areaToDelete":"x",
-        "sectionToDelete":"x",
+        "deleteItemMaster": deleteItemMaster,
+        "fileToDelete":"",
+        "areaToDelete":"",
+        "sectionToDelete":"",
         "auditorToDelete":""
     }
     console.log(params)
@@ -745,11 +751,15 @@ $(document).ready(function() {
   $("#modal-delete-files-toggle").click(function(e){
     updateDeleteLabels();
  });
+    $("#modal-delete-item-master-toggle").click(function(e){
+        updateDeleteLabels();
+    });
 
   $('#modal-delete-inventory-counts').on('show.bs.modal', function (e) {
     // do something...
     $('#modal-delete-counts-toggle').prop("checked",false);
     $('#modal-delete-files-toggle').prop("checked",false);
+    $('#modal-delete-item-master-toggle').prop("checked",false);
     updateDeleteLabels();
   })
 
@@ -1044,8 +1054,15 @@ $(document).ready(function() {
     else {
         $("#modal-delete-files-label").html("Don't delete files")
     }
+    if ($('#modal-delete-item-master-toggle').is(":checked")) {
+        $("#modal-delete-item-master-label").html("Delete item master")
+        //$('#modal-delete-counts-toggle').prop("checked",false);
+    }
+    else {
+        $("#modal-delete-item-master-label").html("Don't delete item master")
+    }
 
-    if ($('#modal-delete-counts-toggle').is(":checked")  || $('#modal-delete-files-toggle').is(":checked"))   { 
+    if ($('#modal-delete-counts-toggle').is(":checked")  || $('#modal-delete-files-toggle').is(":checked") || $('#modal-delete-item-master-toggle').is(":checked"))   { 
         //$("#modal-delete-inventory-button").prop("disabled",false);
 
     }
@@ -1160,6 +1177,8 @@ $(document).ready(function() {
                           allDim = ndx.dimension(function(d) {
                               return d;
                           });
+                          console.log("total");
+                          console.log(allDim.groupAll().reduceSum(function(info){return info.inv_quantity;}).value());
                           auditorsDim = ndx.dimension(function(d) {
                               return d.inv_auditor;
                           });

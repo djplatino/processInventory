@@ -45,16 +45,18 @@ if (isset($_POST['action'])) {
             //print_r($currentInventory);
             break;
         case "deleteInventory":
-            $deleteCounts    = $POST['deleteCounts'];
-            $deleteFiles     = $POST['deleteFiles'];
-            $areaToDelete    = $POST['areaToDelete'];
-            $fileToDelete    = $POST['fileToDelete'];
-            $sectionToDelete = $POST['sectionToDelete'];
-            $auditorToDelete = $POST['auditorToDelete'];
+            $deleteCounts     = $POST['deleteCounts'];
+            $deleteFiles      = $POST['deleteFiles'];
+            $deleteItemMaster = $POST['deleteItemMaster'];
+            $areaToDelete     = $POST['areaToDelete'];
+            $fileToDelete     = $POST['fileToDelete'];
+            $sectionToDelete  = $POST['sectionToDelete'];
+            $auditorToDelete  = $POST['auditorToDelete'];
             
             
             echo $deleteCounts;
             echo $deleteFiles;
+            echo $deleteItemMaster;
             /*
             if ($deleteCounts == "Y" && $deleteFiles == "Y") {
                 echo '{"status":"success","info":' . $deleteCounts . '}';
@@ -69,29 +71,70 @@ if (isset($_POST['action'])) {
             switch(true){
                 case ($deleteCounts == "Y" 
                   && $deleteFiles == "Y" 
+                  && $deleteItemMaster == "Y"
                   && $areaToDelete == ""
                   && $sectionToDelete == ""
                   && $fileToDelete == ""
                   && $auditorToDelete == ""):
-                    echo '{"status":"success","info0":' . $deleteCounts . '}';
+                    echo '{"status":"success","info00":' . $deleteCounts . '}';
                     break;
                 case ($deleteCounts == "Y" 
-                && $deleteFiles == "N" 
-                && $areaToDelete == ""
-                && $sectionToDelete == ""
-                && $fileToDelete == ""
-                && $auditorToDelete == ""):    
-                    echo '{"status":"success","info1":' . $deleteCounts . '}';
-                case ($deleteCounts == "N" 
                     && $deleteFiles == "Y" 
+                    && $deleteItemMaster == "N"
                     && $areaToDelete == ""
                     && $sectionToDelete == ""
                     && $fileToDelete == ""
-                    && $auditorToDelete == ""):    
-                        echo '{"status":"success","info2":' . $deleteCounts . '}';
+                    && $auditorToDelete == ""):
+                      echo '{"status":"success","info01":' . $deleteCounts . '}';
+                      break;
+                case ($deleteCounts == "Y" 
+                    && $deleteFiles == "N" 
+                    && $deleteItemMaster == "Y"
+                    && $areaToDelete == ""
+                    && $sectionToDelete == ""
+                    && $fileToDelete == ""
+                    && $auditorToDelete == ""):
+                    echo '{"status":"success","info02":' . $deleteCounts . '}';
+                    break;
+                case ($deleteCounts == "Y" 
+                    && $deleteFiles == "N" 
+                    && $deleteItemMaster == "N"
+                    && $areaToDelete == ""
+                    && $sectionToDelete == ""
+                    && $fileToDelete == ""
+                    && $auditorToDelete == ""):
+                    echo '{"status":"success","info03":' . $deleteCounts . '}';
+                    break;
+                case ($deleteCounts == "N" 
+                    && $deleteFiles == "Y" 
+                    && $deleteItemMaster == "Y"
+                    && $areaToDelete == ""
+                    && $sectionToDelete == ""
+                    && $fileToDelete == ""
+                    && $auditorToDelete == ""):
+                    echo '{"status":"success","info04":' . $deleteCounts . '}';
+                    break;
+                case ($deleteCounts == "N" 
+                    && $deleteFiles == "Y" 
+                    && $deleteItemMaster == "N"
+                    && $areaToDelete == ""
+                    && $sectionToDelete == ""
+                    && $fileToDelete == ""
+                    && $auditorToDelete == ""):
+                    echo '{"status":"success","info05":' . $deleteCounts . '}';
                     break;
                 case ($deleteCounts == "N" 
                     && $deleteFiles == "N" 
+                    && $deleteItemMaster == "Y"
+                    && $areaToDelete == ""
+                    && $sectionToDelete == ""
+                    && $fileToDelete == ""
+                    && $auditorToDelete == ""):
+                    echo '{"status":"success","info06":' . $deleteCounts . '}';
+                    break;
+                case ($deleteCounts == "N" 
+                    && $deleteFiles == "N" 
+                    && $deleteItemMaster == "N"
                     && $areaToDelete == ""
                     && $sectionToDelete == ""
                     && $fileToDelete != ""
@@ -100,6 +143,7 @@ if (isset($_POST['action'])) {
                     break;
                 case ($deleteCounts == "N" 
                     && $deleteFiles == "N" 
+                    && $deleteItemMaster == "N"
                     && $areaToDelete == ""
                     && $sectionToDelete == ""
                     && $fileToDelete == ""
@@ -108,6 +152,7 @@ if (isset($_POST['action'])) {
                     break;
                 case ($deleteCounts == "N" 
                     && $deleteFiles == "N" 
+                    && $deleteItemMaster == "N"
                     && $areaToDelete == "ALL"
                     && $sectionToDelete == "ALL"
                     && $fileToDelete == ""
@@ -115,6 +160,7 @@ if (isset($_POST['action'])) {
                         echo '{"status":"success","info6":' . $deleteCounts . '}';
                 case ($deleteCounts == "N" 
                     && $deleteFiles == "N" 
+                    && $deleteItemMaster == "N"
                     && $areaToDelete != ""
                     && $areaToDelete != "ALL"
                     && $sectionToDelete == "ALL"
@@ -124,6 +170,7 @@ if (isset($_POST['action'])) {
                     break;
                 case ($deleteCounts == "N" 
                     && $deleteFiles == "N" 
+                    && $deleteItemMaster == "N"
                     && $areaToDelete != ""
                     && $areaToDelete != "ALL"
                     && $sectionToDelete != "ALL"
