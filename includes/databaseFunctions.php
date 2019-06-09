@@ -1,5 +1,17 @@
 <?php
 
+
+function deleteAllInventory(&$mysql) {
+    $deleteSQL = "DELETE FROM retail_inventory";
+    //echo $deleteSQL;
+    if (!mysqli_query($mysql, $deleteSQL)) {
+        die('{"status":"failed","message":"Database error - deleteAllInventory","error":203}');
+    }
+    //mysql_query($mysql, $deleteSQL);
+    return '{"status":"success","entriesDeleted":' . mysqli_affected_rows ($mysql) . '}';
+
+}
+
 function getInitialData(&$mysql)
 {
     //echo '{"status":"success"}';

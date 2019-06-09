@@ -54,9 +54,9 @@ if (isset($_POST['action'])) {
             $auditorToDelete  = $POST['auditorToDelete'];
             
             
-            echo $deleteCounts;
-            echo $deleteFiles;
-            echo $deleteItemMaster;
+            //echo $deleteCounts;
+            //echo $deleteFiles;
+            //echo $deleteItemMaster;
             /*
             if ($deleteCounts == "Y" && $deleteFiles == "Y") {
                 echo '{"status":"success","info":' . $deleteCounts . '}';
@@ -103,7 +103,21 @@ if (isset($_POST['action'])) {
                     && $sectionToDelete == ""
                     && $fileToDelete == ""
                     && $auditorToDelete == ""):
-                    echo '{"status":"success","info03":' . $deleteCounts . '}';
+                    $result =  deleteAllInventory($mysql);
+                    echo $result;
+                    /*
+                    $resultInfo = json_decode($result, true);
+                    if ($resultInfo['status']=="success") {
+                        //echo '{"status":"success","info03":' . $deleteCounts . '}';
+                        echo $result;
+
+                    }
+                    else {
+                        echo $result;
+                    }*/
+
+
+                    
                     break;
                 case ($deleteCounts == "N" 
                     && $deleteFiles == "Y" 

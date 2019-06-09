@@ -37,6 +37,9 @@ $(document).ready(function() {
   var dates = [];
   var customers = [];
   var inventoryCounts = [];
+  var filesToDelete = [];
+  var itemMasterToDelete = "";
+  
 
 
   var ndx;
@@ -737,7 +740,9 @@ $(document).ready(function() {
         action: 'deleteInventory',
         "deleteCounts":deleteCounts,
         "deleteFiles": deleteFiles,
+        "filesToDelete": filesToDelete,
         "deleteItemMaster": deleteItemMaster,
+        "itemMasterToDelete":itemMasterToDelete,
         "fileToDelete":"",
         "areaToDelete":"",
         "sectionToDelete":"",
@@ -757,6 +762,15 @@ $(document).ready(function() {
 
   $('#modal-delete-inventory-counts').on('show.bs.modal', function (e) {
     // do something...
+    //var files = filesDim.top(Infinity);
+    //var files = filesGroup.top(Infinity);
+    //console.log("files");
+    //console.log(files);
+    //files.forEach(function(d){
+    //    console.log(d);
+    //})
+    filesToDelete = [];
+    itemMasterToDelete = "";
     $('#modal-delete-counts-toggle').prop("checked",false);
     $('#modal-delete-files-toggle').prop("checked",false);
     $('#modal-delete-item-master-toggle').prop("checked",false);
@@ -1042,24 +1056,41 @@ $(document).ready(function() {
   function updateDeleteLabels(){
     if ($('#modal-delete-counts-toggle').is(":checked")) {
         $("#modal-delete-counts-label").html("Delete counts")
+        $("#modal-delete-counts-count").html(ndx.size());
         //$('#modal-delete-counts-toggle').prop("checked",false);
     }
     else {
+        $("#modal-delete-counts-count").html(0);
+
         $("#modal-delete-counts-label").html("Don't delete counts")
     }
     if ($('#modal-delete-files-toggle').is(":checked")) {
+        filesToDelete = [];
+        var files = filesGroup.top(Infinity);
+
+        files.forEach(function(d){
+            filesToDelete.push(d.key);
+        })
+        console.log(filesToDelete);
+        $("#modal-delete-files-count").html(filesToDelete.length);
         $("#modal-delete-files-label").html("Delete files")
         //$('#modal-delete-counts-toggle').prop("checked",false);
     }
     else {
+        filesToDelete = [];
+        $("#modal-delete-files-count").html(filesToDelete.length);
         $("#modal-delete-files-label").html("Don't delete files")
     }
     if ($('#modal-delete-item-master-toggle').is(":checked")) {
-        $("#modal-delete-item-master-label").html("Delete item master")
+        $("#modal-delete-item-master-label").html("Delete item master");
+        $("#modal-delete-item-master-count").html(1);
+        itemMasterToDelete = "itemMaster.json";
         //$('#modal-delete-counts-toggle').prop("checked",false);
     }
     else {
-        $("#modal-delete-item-master-label").html("Don't delete item master")
+        $("#modal-delete-item-master-label").html("Don't delete item master");
+        $("#modal-delete-item-master-count").html(0);
+        itemMasterToDelete = "";
     }
 
     if ($('#modal-delete-counts-toggle').is(":checked")  || $('#modal-delete-files-toggle').is(":checked") || $('#modal-delete-item-master-toggle').is(":checked"))   { 

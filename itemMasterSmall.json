@@ -1,0 +1,17 @@
+[{
+	"item_id": "000000000001",
+	"description": "Item 000000000001",
+	"quantity_on_hand": "1",
+	"department": "011",
+	"department_description": "Department 011",
+	"unit_of_measure": "EA",
+	"item_price": "1.5"
+}, {
+	"item_id": "000000000002",
+	"description": "Item 000000000002",
+	"quantity_on_hand": "2",
+	"department": "011",
+	"department_description": "Department 011",
+	"unit_of_measure": "EA",
+	"item_price": "3"
+}]
