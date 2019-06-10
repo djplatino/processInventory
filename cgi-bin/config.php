@@ -1,7 +1,7 @@
 <?php
-$host = "localhost";
+$host = "localhost:3307";
 $user = "root";
-$password = "gil";
+$password = "";
 $database = "process_inventory";
 $mysql = mysqli_connect($host, $user, $password, $database);
 if (mysqli_connect_errno()) {

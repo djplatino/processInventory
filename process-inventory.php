@@ -50,8 +50,19 @@ if (isset($_POST['action'])) {
             $deleteItemMaster = $POST['deleteItemMaster'];
             $areaToDelete     = $POST['areaToDelete'];
             $fileToDelete     = $POST['fileToDelete'];
+            
             $sectionToDelete  = $POST['sectionToDelete'];
             $auditorToDelete  = $POST['auditorToDelete'];
+            $itemMasterToDelete = $POST['itemMasterToDelete'];
+
+            if (isset($POST['filesToDelete'])) {
+                $filesToDelete    = $POST['filesToDelete'];
+            }
+            else {
+                $filesToDelete    = [];
+            }
+
+            print_r($POST);
             
             
             //echo $deleteCounts;
@@ -135,6 +146,15 @@ if (isset($_POST['action'])) {
                     && $sectionToDelete == ""
                     && $fileToDelete == ""
                     && $auditorToDelete == ""):
+                    echo $filesToDelete[0];
+                    foreach ($filesToDelete as $file)
+                    {
+                        if(file_exists('uploads/'.$file)){
+                            echo $file;
+                            unlink('uploads/'.$file);
+                        }
+                    }
+
                     echo '{"status":"success","info05":' . $deleteCounts . '}';
                     break;
                 case ($deleteCounts == "N" 
@@ -144,6 +164,13 @@ if (isset($_POST['action'])) {
                     && $sectionToDelete == ""
                     && $fileToDelete == ""
                     && $auditorToDelete == ""):
+                    
+                    if(file_exists('itemMaster/'.$itemMasterToDelete)){
+                        echo $itemMasterToDelete;
+                        unlink('itemMaster/'.$itemMasterToDelete);
+                    }
+
+                    //echo $itemMasterToDelete;
                     echo '{"status":"success","info06":' . $deleteCounts . '}';
                     break;
                 case ($deleteCounts == "N" 
