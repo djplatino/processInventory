@@ -75,6 +75,7 @@ if (isset($_POST['action'])) {
             else {
                 echo '{"status":"success","more info":' . $deleteFiles . '}';
             }
+            
             */
 
 
@@ -87,6 +88,20 @@ if (isset($_POST['action'])) {
                   && $sectionToDelete == ""
                   && $fileToDelete == ""
                   && $auditorToDelete == ""):
+
+                    $result =  deleteAllInventory($mysql);
+                    echo $result;
+                    foreach ($filesToDelete as $file)
+                    {
+                        if(file_exists('uploads/'.$file)){
+                            echo $file;
+                            unlink('uploads/'.$file);
+                        }
+                    }
+                    if(file_exists('itemMaster/'.$itemMasterToDelete)){
+                        echo $itemMasterToDelete;
+                        unlink('itemMaster/'.$itemMasterToDelete);
+                    }
                     echo '{"status":"success","info00":' . $deleteCounts . '}';
                     break;
                 case ($deleteCounts == "Y" 
@@ -96,8 +111,18 @@ if (isset($_POST['action'])) {
                     && $sectionToDelete == ""
                     && $fileToDelete == ""
                     && $auditorToDelete == ""):
-                      echo '{"status":"success","info01":' . $deleteCounts . '}';
-                      break;
+                      
+                        $result =  deleteAllInventory($mysql);
+                        echo $result;
+                        foreach ($filesToDelete as $file)
+                        {
+                            if(file_exists('uploads/'.$file)){
+                                echo $file;
+                                unlink('uploads/'.$file);
+                            }
+                        }
+                        echo '{"status":"success","info01":' . $deleteCounts . '}';
+                        break;
                 case ($deleteCounts == "Y" 
                     && $deleteFiles == "N" 
                     && $deleteItemMaster == "Y"
@@ -105,6 +130,12 @@ if (isset($_POST['action'])) {
                     && $sectionToDelete == ""
                     && $fileToDelete == ""
                     && $auditorToDelete == ""):
+                    $result =  deleteAllInventory($mysql);
+                    echo $result;
+                    if(file_exists('itemMaster/'.$itemMasterToDelete)){
+                        echo $itemMasterToDelete;
+                        unlink('itemMaster/'.$itemMasterToDelete);
+                    }    
                     echo '{"status":"success","info02":' . $deleteCounts . '}';
                     break;
                 case ($deleteCounts == "Y" 
@@ -137,6 +168,18 @@ if (isset($_POST['action'])) {
                     && $sectionToDelete == ""
                     && $fileToDelete == ""
                     && $auditorToDelete == ""):
+
+                    foreach ($filesToDelete as $file)
+                        {
+                            if(file_exists('uploads/'.$file)){
+                                echo $file;
+                                unlink('uploads/'.$file);
+                            }
+                        }
+                    if(file_exists('itemMaster/'.$itemMasterToDelete)){
+                        echo $itemMasterToDelete;
+                        unlink('itemMaster/'.$itemMasterToDelete);
+                    }
                     echo '{"status":"success","info04":' . $deleteCounts . '}';
                     break;
                 case ($deleteCounts == "N" 
