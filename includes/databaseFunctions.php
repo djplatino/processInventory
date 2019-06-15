@@ -1,5 +1,38 @@
 <?php
 
+function deleteByArea(&$mysql, $area) {
+    $deleteSQL = "DELETE FROM retail_inventory where inv_area = '"  . mysqli_real_escape_string($mysql, $area) . "'";
+    //echo $deleteSQL;
+    if (!mysqli_query($mysql, $deleteSQL)) {
+        die('{"status":"failed","message":"Database error - deleteByArea","error":203}');
+    }
+    //mysql_query($mysql, $deleteSQL);
+    return '{"status":"success","entriesDeleted":' . mysqli_affected_rows ($mysql) . '}';
+
+}
+
+function deleteByAuditor(&$mysql, $auditor) {
+    $deleteSQL = "DELETE FROM retail_inventory where inv_auditor = '"  . mysqli_real_escape_string($mysql, $auditor) . "'";
+    //echo $deleteSQL;
+    if (!mysqli_query($mysql, $deleteSQL)) {
+        die('{"status":"failed","message":"Database error - deleteByAuditor","error":203}');
+    }
+    //mysql_query($mysql, $deleteSQL);
+    return '{"status":"success","entriesDeleted":' . mysqli_affected_rows ($mysql) . '}';
+
+}
+
+function deleteByFile(&$mysql, $fileName) {
+    $deleteSQL = "DELETE FROM retail_inventory where inv_file_name = '"  . mysqli_real_escape_string($mysql, $fileName) . "'";
+    //echo $deleteSQL;
+    if (!mysqli_query($mysql, $deleteSQL)) {
+        die('{"status":"failed","message":"Database error - deleteByFile","error":203}');
+    }
+    //mysql_query($mysql, $deleteSQL);
+    return '{"status":"success","entriesDeleted":' . mysqli_affected_rows ($mysql) . '}';
+
+}
+
 
 function deleteAllInventory(&$mysql) {
     $deleteSQL = "DELETE FROM retail_inventory";
@@ -11,6 +44,7 @@ function deleteAllInventory(&$mysql) {
     return '{"status":"success","entriesDeleted":' . mysqli_affected_rows ($mysql) . '}';
 
 }
+
 
 function getInitialData(&$mysql)
 {

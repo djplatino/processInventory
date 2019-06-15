@@ -54,7 +54,7 @@ $(document).ready(function() {
   var areasDim;
   var areasGroup;
 
-  retrieveInventoryCounts();
+  //retrieveInventoryCounts();
 
 
   setTimes(15)
@@ -173,6 +173,11 @@ $(document).ready(function() {
     */
   $('#inventory-auditors-button').click(function(e) {
       e.preventDefault();
+      d3.select('#item-to-delete')
+                .attr('value','');
+      d3.select('#delete-item-value').text('NOTHING');
+      d3.select("#delete-item-count").text(0);
+      dc.filterAll();
       console.log(ndx.size());
       $('#main-chart').empty()
       var chart = dc.pieChart('#main-chart');
@@ -190,19 +195,47 @@ $(document).ready(function() {
       // example of formatting the legend via svg
       // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
       chart.on('pretransition', function(chart) {
-          chart.selectAll('.dc-legend-item text')
+          var temp = chart.selectAll('.dc-legend-item text')
               .text('')
+              .on('click', function(d){
+                console.log(d);
+                var itemToDelete = {'item':'auditor','itemValue':d.name,'itemCount': d.data};
+                d3.select('#item-to-delete')
+                .attr('value',JSON.stringify(itemToDelete));
+                d3.select('#delete-item-value').text(d.name);
+                d3.select("#delete-item-count").text(d.data);
+                //alert($("#item-to-delete").attr('value'));
+
+                //var temp = JSON.parse($("#item-to-delete").attr('value'));
+                //alert(temp.item);
+                
+              })
               .append('tspan')
               .text(function(d) {
                   return d.name;
-              })
-              .append('tspan')
+              });
+              temp.append('tspan')
               .attr('x', 150)
               .attr('text-anchor', 'end')
               .text(function(d) {
                   return d.data;
+              })
+              
+              /*
+              temp.append('tspan')
+              .text("test")
+              .on('click', function(d){
+                //d3.event.preventDefault();
+                //  alert(d);
+                //  return false;
               });
+              */
+              
       });
+      //chart.on('filtered.monitor', function(chart, filter) {
+        //d3.selectAll('.pie-slice selected')
+        
+      //});
       chart.render();
       /*
       chart
@@ -232,6 +265,11 @@ $(document).ready(function() {
 
   $('#inventory-files-button').click(function(e) {
       e.preventDefault();
+      d3.select('#item-to-delete')
+                .attr('value','');
+      d3.select('#delete-item-value').text('NOTHING');
+      d3.select("#delete-item-count").text(0);
+      dc.filterAll();
       console.log(ndx.size());
       $('#main-chart').empty()
       var chart = dc.pieChart('#main-chart');
@@ -251,6 +289,19 @@ $(document).ready(function() {
       chart.on('pretransition', function(chart) {
           chart.selectAll('.dc-legend-item text')
               .text('')
+              .on('click', function(d){
+                console.log(d);
+                var itemToDelete = {'item':'file','itemValue':d.name,'itemCount': d.data};
+                d3.select('#item-to-delete')
+                .attr('value',JSON.stringify(itemToDelete));
+                d3.select('#delete-item-value').text(d.name);
+                d3.select("#delete-item-count").text(d.data);
+                //alert($("#item-to-delete").attr('value'));
+
+                //var temp = JSON.parse($("#item-to-delete").attr('value'));
+                //alert(temp.item);
+                
+              })
               .append('tspan')
               .text(function(d) {
                   //console.log(d);
@@ -294,6 +345,11 @@ $(document).ready(function() {
 
   $('#inventory-areas-button').click(function(e) {
       e.preventDefault();
+      d3.select('#item-to-delete')
+                .attr('value','');
+      d3.select('#delete-item-value').text('NOTHING');
+      d3.select("#delete-item-count").text(0);
+      dc.filterAll();
       console.log(ndx.size());
       $('#main-chart').empty()
       var chart = dc.pieChart('#main-chart');
@@ -320,9 +376,22 @@ $(document).ready(function() {
       chart.on('pretransition', function(chart) {
           chart.selectAll('.dc-legend-item text')
               .text('')
-              .on("click",function(d){
+              //.on("click",function(d){
+              //  console.log(d);
+            //})
+            .on('click', function(d){
                 console.log(d);
-            })
+                var itemToDelete = {'item':'area','itemValue':d.name,'itemCount': d.data};
+                d3.select('#item-to-delete')
+                .attr('value',JSON.stringify(itemToDelete));
+                d3.select('#delete-item-value').text(d.name);
+                d3.select("#delete-item-count").text(d.data);
+                //alert($("#item-to-delete").attr('value'));
+
+                //var temp = JSON.parse($("#item-to-delete").attr('value'));
+                //alert(temp.item);
+                
+              })
               .append('tspan')
               
 
@@ -753,9 +822,75 @@ $(document).ready(function() {
     executeAjax('deleteInventory', params)
   });
 
+  $("#modal-delete-inventory-item-button").click(function(e){
+
+    var deleteCounts    = "N";
+    var deleteFiles     = "N";
+    var deleteItemMaster = "N";
+    var auditorToDelete = "";
+    var fileToDelete    = "";
+    var areaToDelete    = "";
+    var sectionToDelete    = "";
+
+    if ($('#modal-delete-item-toggle').is(":checked")) {
+        //deleteCounts = "Y";
+        var deleteItem;
+        if ($("#item-to-delete").attr('value').length > 0) {
+            deleteItem = JSON.parse($("#item-to-delete").attr('value'));
+            switch(deleteItem.item) {
+                case "auditor":
+                    auditorToDelete = deleteItem.itemValue;
+                    break;
+                case "file":
+                    fileToDelete = deleteItem.itemValue;
+                    break;
+                case "area":
+                    sectionToDelete    = "ALL"
+                    areaToDelete = deleteItem.itemValue;
+                    break;
+            }
+            var params = {
+                action: 'deleteInventory',
+                "deleteCounts":deleteCounts,
+                "deleteFiles": deleteFiles,
+                "filesToDelete": [],
+                "deleteItemMaster": deleteItemMaster,
+                "itemMasterToDelete":"",
+                "fileToDelete":fileToDelete,
+                "areaToDelete":areaToDelete,
+                "sectionToDelete":sectionToDelete,
+                "auditorToDelete":auditorToDelete
+            }
+            console.log(params)
+            // $('#modal-add-inventory').modal('hide')
+            executeAjax('deleteInventory', params)
+            $('#modal-delete-inventory-item').modal('hide')
+
+            /*
+            if ($('#modal-delete-item-toggle').is(":checked")) {
+                $("#modal-delete-item-label").html("Delete " + deleteItem.item + " " + deleteItem.itemValue)
+                $("#modal-delete-item-count").html(deleteItem.itemCount);
+                //$('#modal-delete-counts-toggle').prop("checked",false);
+            }
+            else {
+                $("#modal-delete-item-count").html(0);
+        
+                $("#modal-delete-item-label").html("Don't delete ")
+            }
+            */
+        }
+    }
+    
+    
+    
+  });
+
   $("#modal-delete-files-toggle").click(function(e){
     updateDeleteLabels();
  });
+    $("#modal-delete-item-toggle").click(function(e){
+        updateDeleteItemLabels();
+    });
     $("#modal-delete-item-master-toggle").click(function(e){
         updateDeleteLabels();
     });
@@ -775,6 +910,23 @@ $(document).ready(function() {
     $('#modal-delete-files-toggle').prop("checked",false);
     $('#modal-delete-item-master-toggle').prop("checked",false);
     updateDeleteLabels();
+  })
+
+  $('#modal-delete-inventory-item').on('show.bs.modal', function (e) {
+    // do something...
+    //var files = filesDim.top(Infinity);
+    //var files = filesGroup.top(Infinity);
+    //console.log("files");
+    //console.log(files);
+    //files.forEach(function(d){
+    //    console.log(d);
+    //})
+    //filesToDelete = [];
+    //itemMasterToDelete = "";
+    $('#modal-delete-item-toggle').prop("checked",false);
+    //$('#modal-delete-files-toggle').prop("checked",false);
+    //$('#modal-delete-item-master-toggle').prop("checked",false);
+    updateDeleteItemLabels();
   })
 
   $("#page-navigation-next").click(function(e) {
@@ -1053,6 +1205,40 @@ $(document).ready(function() {
           */
   }
 
+  function updateDeleteItemLabels(){
+    console.log($("#item-to-delete").attr('value'));
+    $("#modal-delete-item-count").html(0);
+    $("#modal-delete-item-label").html("Don't delete ")
+    var deleteItem;
+    if ($("#item-to-delete").attr('value').length > 0) {
+        deleteItem = JSON.parse($("#item-to-delete").attr('value'));
+        if ($('#modal-delete-item-toggle').is(":checked")) {
+            $("#modal-delete-item-label").html("Delete " + deleteItem.item + " " + deleteItem.itemValue)
+            $("#modal-delete-item-count").html(deleteItem.itemCount);
+            //$('#modal-delete-counts-toggle').prop("checked",false);
+        }
+        //else {
+        //    $("#modal-delete-item-count").html(0);
+    
+        //    $("#modal-delete-item-label").html("Don't delete ")
+        //}
+    }
+    //console.log(deleteItem);
+
+    
+   
+   
+
+    if ($('#modal-delete-item-toggle').is(":checked") && $("#item-to-delete").attr('value').length > 0)   { 
+        $("#modal-delete-inventory-item-button").prop("disabled",false);
+
+    }
+    else {
+        $("#modal-delete-inventory-item-button").prop("disabled",true);
+    }
+      
+  }
+
   function updateDeleteLabels(){
     if ($('#modal-delete-counts-toggle').is(":checked")) {
         $("#modal-delete-counts-label").html("Delete counts")
@@ -1123,6 +1309,10 @@ $(document).ready(function() {
       })
 
       var areasGroup = areasDim.group();
+      //chart.render();
+
+      //dc.filterAll();
+      //dc.renderAll();
 
 
       $("#inventory-entries").html(ndx.size());
@@ -1165,6 +1355,7 @@ $(document).ready(function() {
                   switch (action) {
                       case "deleteInventory":
                           console.log("deleteInventory");
+                          retrieveInventoryCounts();
                           break;
                       case 'getInitialData':
                           inventories = msg.inventories
@@ -1222,6 +1413,7 @@ $(document).ready(function() {
                               return d.inv_area
                           })
                           areasGroup = areasDim.group();
+                          
 
 
 
@@ -1229,6 +1421,7 @@ $(document).ready(function() {
 
                           $('#inventory-menu').val(1);
                           $("#inventory-entries-button").trigger("click");
+                          $("#inventory-areas-button").trigger('click');
 
 
 
