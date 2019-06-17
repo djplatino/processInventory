@@ -54,6 +54,9 @@ $(document).ready(function() {
   var areasDim;
   var areasGroup;
 
+  var dateFormat = d3.timeFormat('%m-%d-%Y');
+  var timeFormat = d3.timeFormat('%I:%M %p');
+
   //retrieveInventoryCounts();
 
 
@@ -134,9 +137,38 @@ $(document).ready(function() {
   })
 
   $('#inventory-menu').change(function() {
+     var currentInv = $('#inventory-menu option:selected').val();
+     var inv = inventories.filter(function(d) {
+                return d.id == currentInv
+                });
+//msg.currentInventory.start_date = dateFormat(startDateTime)
+//msg.currentInventory.start_time = timeFormat(startDateTime)                
+     currentInventory.id = inv[0].id;
+     currentInventory.customer_id = inv[0].customer_id;
+     currentInventory.customer_name = inv[0].customer_name;
+     currentInventory.supervisor_id = inv[0].supervisor_id;
+     currentInventory.start_date_time = inv[0].start_date_time;
+     var startDateTime = new Date(currentInventory.start_date_time * 1000)
+     currentInventory.auditor_name = inv[0].auditor_name;
+     currentInventory.start_date = dateFormat(startDateTime);
+     currentInventory.start_time = timeFormat(startDateTime)                ;
+     currentInventory.end_date_time = inv[0].end_date_time;
+     var endDateTime = new Date(currentInventory.end_date_time * 1000)
+     currentInventory.end_date = dateFormat(endDateTime);
+     currentInventory.end_time = timeFormat(endDateTime);
+     currentInventory.is_selected = true;
+     currentInventory.comments = inv[0].comments;
+     console.log(inv);
+     console.log(currentInv);
+     console.log(currentInventory);
       // $( "#inventory-menu:selected" ).each(function() {
+    if (currentInv > 0) {
+
+    }
+
+ 
       enableUdateButton();
-      retrieveInventoryCounts();
+      retrieveInventoryCounts(currentInventory.id);
       //  });
   })
   /*
@@ -411,18 +443,33 @@ $(document).ready(function() {
               //.attr("class","fa fa-trash-o text-warning")
               //.attr("aria-hidden","true");
       });
-      /*
+     /* 
       chart.on('renderlet', function(chart) {
         chart.selectAll('rect').on('click', function(d) {
            console.log('click!', d);
         });
      });
      */
+    //d3.select("g.sliceActive").classed("slice5")
     /*
     chart.renderlet(function(_chart){
+        
+        //console.log(allDim.hasFilter());
+        //console.log(_chart);
+        //if (_chart.classed('selected')) {
+            //console.log("has class");
+        //}
+        //else {
+            //console.log("without a class");
+        //}
+
         _chart.selectAll(".pie-slice")
         .on("click",function(d){
             console.log(d);
+            console.log(allDim.top(Infinity));
+            console.log(ndx.size());
+            console.log(ndx.groupAll().value());
+            //countFiltered.value() != ndx.size()
         })
             //console.log(_chart.selectAll(".pie-slice").classed("selected"));
             //console.log(d)
@@ -433,6 +480,7 @@ $(document).ready(function() {
         
   });
   */
+  
   
     /*
      
@@ -1108,9 +1156,10 @@ $(document).ready(function() {
       }
   }
 
-  function retrieveInventoryCounts() {
+  function retrieveInventoryCounts(inventoryId) {
       var params = {
-          action: 'getInventoryCounts'
+          action: 'getInventoryCounts',
+          inventory_id: inventoryId
       };
       executeAjax('getInventoryCounts', params);
 
@@ -1347,8 +1396,7 @@ $(document).ready(function() {
           })
           .done(function(msg) {
               $('#waiting-for-process').toggleClass('d-none');
-              var dateFormat = d3.timeFormat('%m-%d-%Y');
-              var timeFormat = d3.timeFormat('%I:%M %p');
+              
               console.log(msg)
 
               if (msg.status == 'success') {
@@ -1389,6 +1437,7 @@ $(document).ready(function() {
 
                           break;
                       case "getInventoryCounts":
+                          
                           console.log(msg.inventoryCounts);
 
                           inventoryCounts = msg.inventoryCounts;
@@ -1419,7 +1468,10 @@ $(document).ready(function() {
 
                           updateInventoryInfo(inventoryCounts);
 
-                          $('#inventory-menu').val(1);
+                          console.log("param");
+                          //console.log(params.inventory);
+
+                          $('#inventory-menu').val(params.inventory_id);
                           $("#inventory-entries-button").trigger("click");
                           $("#inventory-areas-button").trigger('click');
 

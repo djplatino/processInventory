@@ -131,7 +131,7 @@ from retail_inventory a
 LEFT JOIN retail_item_master AS b
 ON b.item_id = a.item_id
  */
-function getInventoryCounts(&$mysql)
+function getInventoryCounts(&$mysql, $inventoryId)
 {
 //Before sending the data we are going to process for no found
 
@@ -201,7 +201,17 @@ function getInventoryCounts(&$mysql)
         $inventoryCounts[] = $row;
     }
 
-    return '{"status":"success","inventoryCounts":' . json_encode($inventoryCounts) . '}';
+    $sqlArea = "SELECT inventory_id, inv_area FROM inventory_area WHERE inventory_id = " . $inventoryId;
+    mysqli_query($mysql, 'SET NAMES utf8');
+    $resultAreas = mysqli_query($mysql, $sqlArea);
+    $inventoryAreas = array();
+    while ($row = mysqli_fetch_object($resultAreas)) {
+        //$itemFound = true;
+        $inventoryAreas->section = array();
+        $inventoryAreas[] = $row;
+    }
+
+    return '{"status":"success","inventoryCounts":' . json_encode($inventoryCounts) . ',"areas":' . json_encode($inventoryAreas) .'}';
 
 }
 

@@ -16,7 +16,8 @@ if (isset($_POST['action'])) {
             echo getInitialData($mysql);
             break;
         case "getInventoryCounts":
-            echo getInventoryCounts($mysql);
+            $inventoryId = $POST["inventory_id"];
+            echo getInventoryCounts($mysql, $inventoryId);
             break;
         case "addInventory":
             $currentInventory = $POST["currentInventory"];
