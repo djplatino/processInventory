@@ -385,7 +385,8 @@ $(document).ready(function() {
       d3.select("#delete-item-count").text(0);
       dc.filterAll();
       console.log(ndx.size());
-      $('#main-chart').empty()
+      $('#main-chart').empty();
+      $('#main-chart').removeClass("dc-chart");
       var areaInfo = d3.select('#main-chart').append('div').attr('class','row');
       
       areaInfo.append('div')
@@ -405,7 +406,7 @@ $(document).ready(function() {
 
       //pie.colors(function(d){ return colorScale(d.fruitType); });
       chart
-          .width(fluidWidth)
+          .width(fluidWidth/2)
           .height(400)
           //.slicesCap(6)
           
