@@ -210,7 +210,7 @@ function getInventoryCounts(&$mysql, $inventoryId)
         $row->sections = array();
         $sectionSql = "SELECT inv_section
                        FROM area_section
-                     WHERE inv_area = '" . $row->inv_area  . "'";
+                       WHERE inv_area = '" . $row->inv_area  . "' AND inventory_id = " . $inventoryId;
                      
          //echo $crewSql;            
          $sectionResult = mysqli_query($mysql, $sectionSql);

@@ -31,6 +31,7 @@ $(document).ready(function() {
 
   // It will start with nothing until it is created or selected
   var inventories = [];
+  var inventoryAreas = [];
   var auditors = [];
   var supervisors = [];
   var times = [];
@@ -385,20 +386,60 @@ $(document).ready(function() {
       d3.select("#delete-item-count").text(0);
       dc.filterAll();
       console.log(ndx.size());
+      console.log(areasGroup.top(Infinity));
+
+
       $('#main-chart').empty();
       $('#main-chart').removeClass("dc-chart");
-      var areaInfo = d3.select('#main-chart').append('div').attr('class','row');
+      var areaInfo = d3.select('#main-chart');
+      //.append('div');
+      //.attr('class','row d-flex flex-row');
       
       areaInfo.append('div')
-      .attr('class','col-3');
-      
+      .attr('class','p-2 flex-fill')
+      .append('div')
+      .attr('class','list-group')
+      .selectAll('button')
+      .data(inventoryAreas)
+      .enter()
+      .append('button')
+      .attr('type','button')
+      .attr('id',function(d){
+          return 'button-area-' + d.inv_area;
+      })
+      .attr('class','list-group-item d-flex justify-content-between align-items-center list-group-item-action')
+      .html(function(d){
+          //var tmp = areasDim.filter(d.inv_area);
+          var tmp = areasGroup.top(Infinity).filter(function(x) {return x.key == d.inv_area}); 
+          console.log(tmp);
+          if (tmp.length > 0)
+            return d.inv_area + '<span class="badge badge-primary badge-pill">' + tmp[0].value + '</span>'; 
+          else 
+            return d.inv_area + '<span class="badge badge-primary badge-pill">0</span>';
+      });
+            
       areaInfo.append('div')
-      .attr('class','col-6')
+      .attr('class','p-2 flex-fill')
       .append('div')
       .attr('id','area-chart');
       
+      var areaSections = inventoryAreas[0].sections;
       areaInfo.append('div')
-      .attr('class','col-3');
+      .attr('class','p-2 flex-fill')
+      .append('div')
+      .attr('class','list-group')
+      .selectAll('button')
+      .data(areaSections)
+      .enter()
+      .append('button')
+      .attr('type','button')
+      .attr('id',function(d){
+          return 'button-section-' + d.inv_section;
+      })
+      .attr('class','list-group-item d-flex justify-content-between align-items-center list-group-item-action')
+      .html(function(d){
+        return d.inv_section   
+       });
 
       var chart = dc.pieChart('#area-chart');
       //var colorScale = d3.scale.ordinal().domain(["banana", "cherry", "blueberry"])
@@ -409,7 +450,14 @@ $(document).ready(function() {
           .width(fluidWidth/2)
           .height(400)
           //.slicesCap(6)
-          
+          chart.addFilterHandler(function (filters, filter) {
+              //console.log("here");
+              //console.log(filter);
+            
+            filters = [];
+            filters.push(filter);
+            return filters;
+            })
           .innerRadius(75)
           .externalLabels(25)
           .externalRadiusPadding(25)
@@ -1465,6 +1513,9 @@ $(document).ready(function() {
                           console.log(msg.inventoryCounts);
 
                           inventoryCounts = msg.inventoryCounts;
+                          inventoryAreas  = msg.areas;
+                          console.log("areas");
+                          console.log(inventoryAreas);
                           inventoryCounts.forEach(function(d) {
                               return d.inv_sequence = d.inv_sequence * 1
                           })
@@ -1486,6 +1537,8 @@ $(document).ready(function() {
                               return d.inv_area
                           })
                           areasGroup = areasDim.group();
+
+
 
                           //sectionDim = ndx.dimension(function(d) {
                           //  return d.inv_area + ',' + d.inv_section
