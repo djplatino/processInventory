@@ -207,7 +207,7 @@ function getInventoryCounts(&$mysql, $inventoryId)
     $inventoryAreas = array();
     while ($row = mysqli_fetch_object($resultAreas)) {
         //$itemFound = true;
-        $row->section = array();
+        $row->sections = array();
         $sectionSql = "SELECT inv_section
                        FROM area_section
                      WHERE inv_area = '" . $row->inv_area  . "'";
@@ -215,7 +215,7 @@ function getInventoryCounts(&$mysql, $inventoryId)
          //echo $crewSql;            
          $sectionResult = mysqli_query($mysql, $sectionSql);
          while ($section = mysqli_fetch_object($sectionResult)) {
-            $row->section[] = $section;
+            $row->sections[] = $section;
          }  
         $inventoryAreas[] = $row;
     }

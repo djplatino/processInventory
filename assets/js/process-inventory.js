@@ -53,6 +53,8 @@ $(document).ready(function() {
   var filesGroup;
   var areasDim;
   var areasGroup;
+  //var sectionDim;
+  //var sectionGroup;
 
   var dateFormat = d3.timeFormat('%m-%d-%Y');
   var timeFormat = d3.timeFormat('%I:%M %p');
@@ -384,18 +386,32 @@ $(document).ready(function() {
       dc.filterAll();
       console.log(ndx.size());
       $('#main-chart').empty()
-      var chart = dc.pieChart('#main-chart');
+      var areaInfo = d3.select('#main-chart').append('div').attr('class','row');
+      
+      areaInfo.append('div')
+      .attr('class','col-3');
+      
+      areaInfo.append('div')
+      .attr('class','col-6')
+      .append('div')
+      .attr('id','area-chart');
+      
+      areaInfo.append('div')
+      .attr('class','col-3');
+
+      var chart = dc.pieChart('#area-chart');
       //var colorScale = d3.scale.ordinal().domain(["banana", "cherry", "blueberry"])
                                   // .range(["#eeff00", "#ff0022", "#2200ff"]);
 
       //pie.colors(function(d){ return colorScale(d.fruitType); });
       chart
           .width(fluidWidth)
-          .height(480)
-          .slicesCap(4)
-          .innerRadius(100)
-          .externalLabels(50)
-          .externalRadiusPadding(50)
+          .height(400)
+          //.slicesCap(6)
+          
+          .innerRadius(75)
+          .externalLabels(25)
+          .externalRadiusPadding(25)
           .drawPaths(true)
           .dimension(areasDim)
           .group(areasGroup)
@@ -413,6 +429,7 @@ $(document).ready(function() {
             //})
             .on('click', function(d){
                 console.log(d);
+                //console.log(sectionDim.top(Infinity));
                 var itemToDelete = {'item':'area','itemValue':d.name,'itemCount': d.data};
                 d3.select('#item-to-delete')
                 .attr('value',JSON.stringify(itemToDelete));
@@ -462,6 +479,7 @@ $(document).ready(function() {
         //else {
             //console.log("without a class");
         //}
+        //console.log(sectionDim.top(Infinity));
 
         _chart.selectAll(".pie-slice")
         .on("click",function(d){
@@ -480,6 +498,7 @@ $(document).ready(function() {
         
   });
   */
+  
   
   
     /*
@@ -1357,7 +1376,11 @@ $(document).ready(function() {
           return d.inv_area
       })
 
+      
+
       var areasGroup = areasDim.group();
+
+      
       //chart.render();
 
       //dc.filterAll();
@@ -1462,6 +1485,13 @@ $(document).ready(function() {
                               return d.inv_area
                           })
                           areasGroup = areasDim.group();
+
+                          //sectionDim = ndx.dimension(function(d) {
+                          //  return d.inv_area + ',' + d.inv_section
+                            //return d.inv_section
+                          //})
+                    
+                          //sectionGroup = sectionDim.group();
                           
 
 
