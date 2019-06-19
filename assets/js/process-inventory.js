@@ -48,6 +48,16 @@ $(document).ready(function() {
   var allDim;
   var searchDim;
 
+  var areaNdx;
+  var areaTableChart;
+  var areaSearchDim;
+  var areaSectionSearchDim;
+  var allAreasDim;
+  var allAreasGroup;
+  var allAreasSectionsDim;
+  var allAreasSectionsGroup;
+
+
   var auditorsDim;
   var auditorsGroup;
   var filesDim;
@@ -214,7 +224,12 @@ $(document).ready(function() {
       d3.select("#delete-item-count").text(0);
       dc.filterAll();
       console.log(ndx.size());
-      $('#main-chart').empty()
+      $('#main-chart').empty();
+      $('#main-chart').removeClass("dc-chart");
+      $('#area-chart').empty();
+      $('#area-chart').removeClass("dc-chart");
+      $('#section-chart').empty();
+      $('#section-chart').removeClass("dc-chart");
       var chart = dc.pieChart('#main-chart');
       chart
           .width(fluidWidth)
@@ -306,7 +321,12 @@ $(document).ready(function() {
       d3.select("#delete-item-count").text(0);
       dc.filterAll();
       console.log(ndx.size());
-      $('#main-chart').empty()
+      $('#main-chart').empty();
+      $('#main-chart').removeClass("dc-chart");
+      $('#area-chart').empty();
+      $('#area-chart').removeClass("dc-chart");
+      $('#section-chart').empty();
+      $('#section-chart').removeClass("dc-chart");
       var chart = dc.pieChart('#main-chart');
       chart
           .width(fluidWidth)
@@ -382,15 +402,24 @@ $(document).ready(function() {
       e.preventDefault();
       d3.select('#item-to-delete')
                 .attr('value','');
+      //$("#area-charts").empty();
+      //$("#main-chart").empty();
       d3.select('#delete-item-value').text('NOTHING');
       d3.select("#delete-item-count").text(0);
       dc.filterAll();
-      console.log(ndx.size());
+      console.log("inventory-areas-button");
       console.log(areasGroup.top(Infinity));
-
-
       $('#main-chart').empty();
       $('#main-chart').removeClass("dc-chart");
+      $('#area-chart').empty();
+      $('#area-chart').removeClass("dc-chart");
+      $('#section-chart').empty();
+      $('#section-chart').removeClass("dc-chart");
+
+
+      
+
+      /*
       var areaInfo = d3.select('#main-chart');
       //.append('div');
       //.attr('class','row d-flex flex-row');
@@ -450,6 +479,7 @@ $(document).ready(function() {
       .html(function(d){
         return d.inv_section   
        });
+       */
 
       var chart = dc.pieChart('#area-chart');
       //var colorScale = d3.scale.ordinal().domain(["banana", "cherry", "blueberry"])
@@ -652,12 +682,158 @@ $(document).ready(function() {
         console.log(chart);
       });
       */
+     //$('#main-chart').empty();
+      //$('#main-chart').removeClass("dc-chart");
       
       chart.render();
       sectionChart.render();
+      setAreaTable();
 
       
   })
+
+  function setAreaSectionTable(data){
+    console.log("setAreaSectionTable");
+    console.log(data);
+    var sectionNdx = crossfilter(data);
+    var allSectionsDim = sectionNdx.dimension(function(d){
+        return d.inv_section;
+    })
+    
+    var sectionThHeaders = new Array();
+
+
+    sectionThHeaders.push("inv_area");
+    sectionThHeaders.push("quantity");
+
+    areaSectionSearchDim = areaNdx.dimension(function(d) {
+        console.log(d);
+        return d.sections;
+    });
+    var areaSectionSearch = dc.textFilterWidget("#area--section-search").dimension(areaSearchDim);
+    areaSectionTableChart = dc.dataTable("#section-table");
+    var areaSectionTableHeader = d3.select("#area-table .table-header").selectAll("th");
+    areaSectionTableHeader = areaSectionTableHeader.data(
+        [   {
+                label: "Section",
+                field_name: "inv_section",
+                sort_state: "ascending"
+            },
+            {
+                label: "Qty",
+                field_name: "inv_quantity",
+                sort_state: "descending"
+            } // Note Max Conf row starts off as descending
+        ]
+    );
+    // enter() into virtual selection and create new <th> header elements for each table column
+    areaSectionTableHeader = areaSectionTableHeader.enter()
+    .append("th")
+    .text(function(d) {
+        return d.label;
+    }); // Accessor function for header titles
+    //.on("click", tableHeaderCallback);
+
+    //tableHeader.filter(function(d) {
+    //    return d.label === "Seq";
+    //})
+    //.classed("info", true);
+    var areaSectionColumnFunctions = [
+        function(d) {
+            //return '<button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>';
+            return d.inv_section;
+        },
+        function(d) {
+            return '<span class="float-right">0</span>';
+        },
+    ];
+
+    areaSectionTableChart
+          .dimension(allSectionsDim)
+          .size(Infinity)
+          .columns(areaSectionColumnFunctions)
+          .on('renderlet', function(table) {
+            table.select('#section-table tr.dc-table-group').remove();
+            table.selectAll('#section-table td.dc-table-column')
+            .attr('style','cursor:pointer')
+            .on('click',function(d){
+                console.log(d);
+                
+            });
+            //console.log(allAreasSectionsDim.top(Infinity));
+        })
+    dc.renderAll();
+
+  }
+
+  function setAreaTable() {
+    console.log("setAreaTable");
+    
+    var areaThHeaders = new Array();
+
+
+    areaThHeaders.push("inv_area");
+    areaThHeaders.push("quantity");
+
+    areaSearchDim = areaNdx.dimension(function(d) {
+        return d.inv_area;
+    });
+    var areaSearch = dc.textFilterWidget("#area-search").dimension(areaSearchDim);
+    areaTableChart = dc.dataTable("#area-table");
+    var areaTableHeader = d3.select("#area-table .table-header").selectAll("th");
+    areaTableHeader = areaTableHeader.data(
+        [   {
+                label: "Area",
+                field_name: "inv_area",
+                sort_state: "ascending"
+            },
+            {
+                label: "Qty",
+                field_name: "inv_quantity",
+                sort_state: "descending"
+            } // Note Max Conf row starts off as descending
+        ]
+    );
+    // enter() into virtual selection and create new <th> header elements for each table column
+    areaTableHeader = areaTableHeader.enter()
+    .append("th")
+    .text(function(d) {
+        return d.label;
+    }); // Accessor function for header titles
+    //.on("click", tableHeaderCallback);
+
+    //tableHeader.filter(function(d) {
+    //    return d.label === "Seq";
+    //})
+    //.classed("info", true);
+    var areaColumnFunctions = [
+        function(d) {
+            //return '<button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>';
+            return d.inv_area;
+        },
+        function(d) {
+            return '<span class="float-right">0</span>';
+        },
+    ];
+
+    areaTableChart
+          .dimension(allAreasDim)
+          .size(Infinity)
+          .columns(areaColumnFunctions)
+          .on('renderlet', function(table) {
+            table.select('#area-table tr.dc-table-group').remove();
+            table.selectAll('#area-table td.dc-table-column')
+            .attr('style','cursor:pointer')
+            .on('click',function(d){
+                console.log(d);
+                setAreaSectionTable(d.sections);
+            });
+            console.log(allAreasSectionsDim.top(Infinity));
+        })
+    dc.renderAll();
+          
+
+  }
 
   function tableHeaderCallback(d) {
       console.log("clicked");
@@ -764,6 +940,18 @@ $(document).ready(function() {
 
   $("#inventory-entries-button").click(function(e) {
       e.preventDefault();
+      d3.select('#item-to-delete')
+                .attr('value','');
+      d3.select('#delete-item-value').text('NOTHING');
+      d3.select("#delete-item-count").text(0);
+      dc.filterAll();
+      $('#main-chart').empty();
+      $('#main-chart').removeClass("dc-chart");
+      $('#area-chart').empty();
+      $('#area-chart').removeClass("dc-chart");
+      $('#section-chart').empty();
+      $('#section-chart').removeClass("dc-chart");
+
 
       console.log(inventoryCounts);
 
@@ -798,7 +986,7 @@ $(document).ready(function() {
       //<span class="input-group-text"><i class="ni ni-zoom-split-in"></i></span>
       tableChart = dc.dataTable("#inventory-entries-table");
 
-      var tableHeader = d3.select(".table-header").selectAll("th");
+      var tableHeader = d3.select("#inventory-entries-table .table-header").selectAll("th");
 
       // Bind data to tableHeader selection.
       tableHeader = tableHeader.data(
@@ -1639,6 +1827,18 @@ $(document).ready(function() {
                           })
                     
                           sectionGroup = sectionDim.group();
+
+
+                          areaNdx = crossfilter(inventoryAreas);
+                          allAreasDim = areaNdx.dimension(function(d){
+                              return d.inv_area;
+                          })
+                          allAreasGroup = allAreasDim.group();
+
+                          allAreasSectionsDim = areaNdx.dimension(function(d){
+                              return d.sections;
+                          })
+                          allAreasSectionsGroup = allAreasSectionsDim.group();
                           
 
 

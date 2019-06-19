@@ -132,9 +132,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <button class="btn btn-info" id="chart-reset-button" type="button">
+                                    
+                                    <!-- <button class="btn btn-info" id="chart-reset-button" type="button">
                                         Reset
-                                    </button>
+                                    </button> -->
                                     <!--<button class="btn btn-danger" id="delete-selected" type="button">-->
                                     <button data-target="#modal-delete-inventory-item" data-toggle="modal" class="btn btn-danger" id="delete-selected-button" type="button">
                                             <input type="hidden" id="item-to-delete" value="">
@@ -147,8 +148,62 @@
                                     <div style="height: 50px;"></div>
 
                                     <div id="main-chart" class="d-flex flex-row justify-content-between">
+
                                         
                                     </div>
+                                    <div id="area-charts" class="d-flex flex-row justify-content-between">
+                                        <div class="p-2 flex-fill">
+                                            <div class="d-flex flex-column">
+                                                <div class="flex-fill">
+                                                    Area
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <div id="area-search"></div>
+                                                    <table class='table table-hover table-striped table-bordered table-bordered table-sm' id='area-table'>
+                                                            <thead>
+                                                                <tr
+                                                                    class='table-header'><!-- Programmatically insert table headers here -->
+                                                                </tr>
+                                                            </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="p-2 flex-fill">
+                                                <div class="d-flex flex-column ">
+                                                        <div class="flex-fill justify-content-center">
+                                                            <div id="area-chart">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-fill">
+                                                            <div id="section-chart">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            
+                                        </div>
+                                        <div class="p-2 flex-fill">
+                                                <div class="d-flex flex-column">
+                                                        <div class="flex-fill">
+                                                            Section
+                                                        </div>
+                                                        <div class="flex-fill">
+                                                            <div id="area-section-search"></div>
+                                                            <table class='table table-hover table-striped table-bordered table-bordered table-sm' id='section-table'>
+                                                                    <thead>
+                                                                        <tr
+                                                                            class='table-header'><!-- Programmatically insert table headers here -->
+                                                                        </tr>
+                                                                    </thead>
+                                                            </table>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    
                                     <!--
                                     <div id="main-chart2" class="d-flex flex-row justify-content-between">
                                         <div class="p-2">
@@ -194,7 +249,7 @@
                                                 </div>
                                             </div>
                                             -->
-                                    <div class="d-flex flex-row">
+                                    <!-- <div class="d-flex flex-row">
                                         <div class="p-2">Flex item 1</div>
                                         <div class="p-2">Flex item 2</div>
                                         <div class="p-2">Flex item 3</div>
@@ -203,7 +258,7 @@
                                         <div class="p-2">Flex item 1</div>
                                         <div class="p-2">Flex item 2</div>
                                         <div class="p-2">Flex item 3</div>
-                                      </div>
+                                      </div> -->
                                     
 
                                 </div>
