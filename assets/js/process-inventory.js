@@ -54,8 +54,8 @@ $(document).ready(function() {
   var filesGroup;
   var areasDim;
   var areasGroup;
-  //var sectionDim;
-  //var sectionGroup;
+  var sectionDim;
+  var sectionGroup;
 
   var dateFormat = d3.timeFormat('%m-%d-%Y');
   var timeFormat = d3.timeFormat('%I:%M %p');
@@ -418,10 +418,20 @@ $(document).ready(function() {
             return d.inv_area + '<span class="badge badge-primary badge-pill">0</span>';
       });
             
-      areaInfo.append('div')
-      .attr('class','p-2 flex-fill')
-      .append('div')
-      .attr('id','area-chart');
+      var sectionInfo = areaInfo.append('div')
+      .attr('class','p-2 flex-fill');
+      //.append('div');
+      //.attr('id','area-chart');
+      var sectionInfo2 =sectionInfo.append('div')
+      .attr('class','d-flex flex-column');
+      sectionInfo2.append('div')
+      //.append('div')
+      .attr('id','area-chart')
+      .attr('class','flex-fill');
+      sectionInfo2.append('div')
+      .attr('class','flex-fill')
+      .attr('id','section-chart');
+      //.attr('text','test');
       
       var areaSections = inventoryAreas[0].sections;
       areaInfo.append('div')
@@ -453,6 +463,7 @@ $(document).ready(function() {
           chart.addFilterHandler(function (filters, filter) {
               //console.log("here");
               //console.log(filter);
+              
             
             filters = [];
             filters.push(filter);
@@ -478,6 +489,7 @@ $(document).ready(function() {
             //})
             .on('click', function(d){
                 console.log(d);
+                
                 //console.log(sectionDim.top(Infinity));
                 var itemToDelete = {'item':'area','itemValue':d.name,'itemCount': d.data};
                 d3.select('#item-to-delete')
@@ -509,13 +521,93 @@ $(document).ready(function() {
               //.attr("class","fa fa-trash-o text-warning")
               //.attr("aria-hidden","true");
       });
-     /* 
+     
       chart.on('renderlet', function(chart) {
-        chart.selectAll('rect').on('click', function(d) {
-           console.log('click!', d);
-        });
+        console.log(sectionDim.top(Infinity));
+        console.log(chart.hasFilter());
+        if (chart.hasFilter()) {
+            $("#section-chart").show();
+            //$("#section-chart").addClass('visible');
+            //$("#section-chart").removeClass('invisible');
+        }
+        else {
+            $("#section-chart").hide();
+            //$("#section-chart").addClass('invisible');
+            //$("#section-chart").removeClass('visible');
+        }
+        //chart.selectAll('rect').on('click', function(d) {
+           //console.log('click!', d);
+        //});
      });
-     */
+
+     var sectionChart = dc.pieChart('#section-chart');
+
+     sectionChart
+          .width(fluidWidth/2)
+          .height(400)
+          //.slicesCap(6)
+          sectionChart.addFilterHandler(function (filters, filter) {
+              //console.log("here");
+              //console.log(filter);
+              
+            
+            filters = [];
+            filters.push(filter);
+            return filters;
+            })
+          .innerRadius(75)
+          .externalLabels(25)
+          .externalRadiusPadding(25)
+          .drawPaths(true)
+          .dimension(sectionDim)
+          .group(sectionGroup)
+          
+          //.colors(function(d){ return colorScale(d.fruitType); })
+          .legend(dc.legend());
+          //chart.colors(d3.scale.ordinal().range(['red','green','blue']));
+      // example of formatting the legend via svg
+      // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
+      sectionChart.on('pretransition', function(sChart) {
+          sChart.selectAll('.dc-legend-item text')
+              .text('')
+              //.on("click",function(d){
+              //  console.log(d);
+            //})
+            .on('click', function(d){
+                console.log(d);
+                
+                //console.log(sectionDim.top(Infinity));
+                var itemToDelete = {'item':'area','itemValue':d.name,'itemCount': d.data};
+                d3.select('#item-to-delete')
+                .attr('value',JSON.stringify(itemToDelete));
+                d3.select('#delete-item-value').text(d.name);
+                d3.select("#delete-item-count").text(d.data);
+                //alert($("#item-to-delete").attr('value'));
+
+                //var temp = JSON.parse($("#item-to-delete").attr('value'));
+                //alert(temp.item);
+                
+              })
+              .append('tspan')
+              
+
+            .text(function(d) {
+                  //console.log(d);
+                  //console.log(d.inv_file_name);
+                  //<i class="fa fa-trash-o" aria-hidden="true"></i>
+                  return d.name ;
+              })
+              .append('tspan')
+              .attr('x', 150)
+              .attr('text-anchor', 'end')
+              .text(function(d) {
+                  return d.data;
+              })
+              //.append("i")
+              //.attr("class","fa fa-trash-o text-warning")
+              //.attr("aria-hidden","true");
+      });
+     
     //d3.select("g.sliceActive").classed("slice5")
     /*
     chart.renderlet(function(_chart){
@@ -562,6 +654,7 @@ $(document).ready(function() {
       */
       
       chart.render();
+      sectionChart.render();
 
       
   })
@@ -1540,12 +1633,12 @@ $(document).ready(function() {
 
 
 
-                          //sectionDim = ndx.dimension(function(d) {
-                          //  return d.inv_area + ',' + d.inv_section
-                            //return d.inv_section
-                          //})
+                          sectionDim = ndx.dimension(function(d) {
+                            //return d.inv_area + ',' + d.inv_section
+                            return d.inv_section
+                          })
                     
-                          //sectionGroup = sectionDim.group();
+                          sectionGroup = sectionDim.group();
                           
 
 
