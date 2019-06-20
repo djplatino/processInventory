@@ -705,10 +705,16 @@ $(document).ready(function() {
         return d.inv_section;
     })
     var sectionDataGroup = sectionDataDim.group();
+    console.log(sectionDataGroup.size());
     console.log(sectionDataGroup.top(Infinity));
     var allSectionsDim = sectionNdx.dimension(function(d){
         return d.inv_section;
     })
+    var allSectionsGroup = allSectionsDim.group();
+    console.log(sectionDataGroup.size());
+    console.log(allSectionsGroup.size());
+    d3.select("#section-completion-count").text(sectionDataGroup.size())
+    d3.select("#section-completion-total").text(allSectionsGroup.size())
     
     var sectionThHeaders = new Array();
 
@@ -770,7 +776,7 @@ $(document).ready(function() {
             }
             */
             var tempSectionGroup = sectionDataGroup.top(Infinity).filter(function(e){
-            return e.key == d.inv_section;
+                return e.key == d.inv_section;
             })
             if (tempSectionGroup.length == 1) {
                 return '<span class="float-right">' + tempSectionGroup[0].value + '</span>';
@@ -797,6 +803,7 @@ $(document).ready(function() {
             //console.log(allAreasSectionsDim.top(Infinity));
         })
     //dc.renderAll();
+    areaSectionSearch.render();
     areaSectionTableChart.render();
 
   }
@@ -813,6 +820,12 @@ $(document).ready(function() {
     areaSearchDim = areaNdx.dimension(function(d) {
         return d.inv_area;
     });
+    areaSearchGroup = areaSearchDim.group();
+    console.log(areaSearchGroup.size());
+    console.log(areasGroup.size());
+    //$("#area-completion").empty();
+    d3.select("#area-completion-total").text(areaSearchGroup.size())
+    d3.select("#area-completion-count").text(areasGroup.size())
     var areaSearch = dc.textFilterWidget("#area-search").dimension(areaSearchDim);
     areaTableChart = dc.dataTable("#area-table");
     var areaTableHeader = d3.select("#area-table .table-header").selectAll("th");
@@ -878,6 +891,7 @@ $(document).ready(function() {
             console.log(allAreasSectionsDim.top(Infinity));
         })
         areaTableChart.render();
+        areaSearch.render();
     //dc.renderAll();
           
 
