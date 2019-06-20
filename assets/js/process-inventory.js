@@ -695,7 +695,17 @@ $(document).ready(function() {
   function setAreaSectionTable(data){
     console.log("setAreaSectionTable");
     console.log(data);
-    var sectionNdx = crossfilter(data);
+    console.log(sectionDim.top(Infinity));
+    var sectionNdx = crossfilter(data.sections);
+    var sectionData = sectionDim.top(Infinity).filter(function(d){
+        return d.inv_area == data.inv_area;
+    })
+    var sectionNdx2 = crossfilter(sectionData);
+    var sectionDataDim = sectionNdx2.dimension(function(d){
+        return d.inv_section;
+    })
+    var sectionDataGroup = sectionDataDim.group();
+    console.log(sectionDataGroup.top(Infinity));
     var allSectionsDim = sectionNdx.dimension(function(d){
         return d.inv_section;
     })
@@ -710,7 +720,7 @@ $(document).ready(function() {
         console.log(d);
         return d.sections;
     });
-    var areaSectionSearch = dc.textFilterWidget("#area--section-search").dimension(areaSearchDim);
+    var areaSectionSearch = dc.textFilterWidget("#area-section-search").dimension(allSectionsDim);
     areaSectionTableChart = dc.dataTable("#section-table");
     var areaSectionTableHeader = d3.select("#area-table .table-header").selectAll("th");
     areaSectionTableHeader = areaSectionTableHeader.data(
@@ -744,7 +754,31 @@ $(document).ready(function() {
             return d.inv_section;
         },
         function(d) {
-            return '<span class="float-right">0</span>';
+            /*
+            var tempAreaGroup = areasGroup.top(Infinity).filter(function(e){
+                return e.key == d.inv_area;
+            })
+            console.log(tempAreaGroup);
+
+            console.log(d);
+            console.log(areasGroup.top(Infinity));
+            if (tempAreaGroup.length == 1) {
+                return '<span class="float-right">' + tempAreaGroup[0].value + '</span>';
+            }
+            else {
+                return '<span class="float-right">0</span>';
+            }
+            */
+            var tempSectionGroup = sectionDataGroup.top(Infinity).filter(function(e){
+            return e.key == d.inv_section;
+            })
+            if (tempSectionGroup.length == 1) {
+                return '<span class="float-right">' + tempSectionGroup[0].value + '</span>';
+            }
+            else {
+                return '<span class="float-right">0</span>';
+            }
+            
         },
     ];
 
@@ -762,7 +796,8 @@ $(document).ready(function() {
             });
             //console.log(allAreasSectionsDim.top(Infinity));
         })
-    dc.renderAll();
+    //dc.renderAll();
+    areaSectionTableChart.render();
 
   }
 
@@ -812,7 +847,19 @@ $(document).ready(function() {
             return d.inv_area;
         },
         function(d) {
-            return '<span class="float-right">0</span>';
+            var tempAreaGroup = areasGroup.top(Infinity).filter(function(e){
+                return e.key == d.inv_area;
+            })
+            console.log(tempAreaGroup);
+
+            console.log(d);
+            console.log(areasGroup.top(Infinity));
+            if (tempAreaGroup.length == 1) {
+                return '<span class="float-right">' + tempAreaGroup[0].value + '</span>';
+            }
+            else {
+                return '<span class="float-right">0</span>';
+            }
         },
     ];
 
@@ -826,11 +873,12 @@ $(document).ready(function() {
             .attr('style','cursor:pointer')
             .on('click',function(d){
                 console.log(d);
-                setAreaSectionTable(d.sections);
+                setAreaSectionTable(d);
             });
             console.log(allAreasSectionsDim.top(Infinity));
         })
-    dc.renderAll();
+        areaTableChart.render();
+    //dc.renderAll();
           
 
   }

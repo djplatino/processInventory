@@ -135,6 +135,14 @@ function getInventoryCounts(&$mysql, $inventoryId)
 {
 //Before sending the data we are going to process for no found
 
+    $sqlInsert = "INSERT into area_section
+                  SELECT DISTINCT " . $inventoryId . " ,inv_area, inv_section 
+                  FROM retail_inventory
+                  WHERE (inv_area, inv_section) not in (SELECT inv_area, inv_section FROM area_section)";
+    if (!mysqli_query($mysql, $sqlInsert)) {
+        die('{"status":"failed","message":"Database error on sqlInsert","error":203}');
+    }                  
+
     $sqlUpdate = "UPDATE retail_inventory SET is_in_item_master = 1";
     if (!mysqli_query($mysql, $sqlUpdate)) {
       die('{"status":"failed","message":"Database error on getInventoryCounts update ","error":203}');
