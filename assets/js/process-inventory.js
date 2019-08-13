@@ -1860,7 +1860,10 @@ $(document).ready(function() {
                           console.log("areas");
                           console.log(inventoryAreas);
                           inventoryCounts.forEach(function(d) {
-                              return d.inv_sequence = d.inv_sequence * 1
+                              //return 
+                              d.inv_sequence = d.inv_sequence * 1;
+                              d.inv_quantity = d.inv_quantity * 1;
+
                           })
                           ndx = crossfilter(inventoryCounts);
                           allDim = ndx.dimension(function(d) {
